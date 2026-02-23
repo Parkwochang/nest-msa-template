@@ -91,7 +91,7 @@ export class GrpcModule {
    * ])
    */
   static registerAsync(options: GrpcClientAsyncOptions[]): DynamicModule {
-    const providers: Provider[] = options.map(({ imports, ...options }) => createGrpcClientProvider(options));
+    const providers: Provider[] = options.map(({ imports, ...option }) => createGrpcClientProvider(option));
 
     return {
       module: GrpcModule,

@@ -3,6 +3,7 @@ import { Transport } from '@nestjs/microservices';
 import type { ClientOptions, GrpcOptions } from '@nestjs/microservices';
 
 import { GATEWAY_CONFIG, type GatewayConfigType } from '../env';
+import { DEFAULT_CHANNEL_OPTIONS, DEFAULT_LOADER_OPTIONS } from './grpc.constants';
 
 // ----------------------------------------------------------------------------
 
@@ -18,18 +19,8 @@ export const createGrpcOptions = (config: Omit<GrpcClientOptions, 'name'>): Clie
     transport: Transport.GRPC,
     options: {
       ...config,
-      loader: {
-        keepCase: true,
-        longs: String,
-        enums: String,
-        defaults: true,
-        oneofs: true,
-      },
-      channelOptions: {
-        'grpc.keepalive_time_ms': 10000,
-        'grpc.keepalive_timeout_ms': 5000,
-        'grpc.keepalive_permit_without_calls': 1,
-      },
+      loader: DEFAULT_LOADER_OPTIONS,
+      channelOptions: DEFAULT_CHANNEL_OPTIONS,
     },
   };
 };
@@ -44,18 +35,8 @@ export function connectGrpcServer(config: GrpcClientConfig): GrpcOptions {
       url: config.url,
       protoPath: config.protoPath,
       package: config.package,
-      loader: {
-        keepCase: true,
-        longs: String,
-        enums: String,
-        defaults: true,
-        oneofs: true,
-      },
-      channelOptions: {
-        'grpc.keepalive_time_ms': 10000,
-        'grpc.keepalive_timeout_ms': 5000,
-        'grpc.keepalive_permit_without_calls': 1,
-      },
+      loader: DEFAULT_LOADER_OPTIONS,
+      channelOptions: DEFAULT_CHANNEL_OPTIONS,
     },
   };
 }
@@ -79,5 +60,4 @@ export const createGrpcClientConfig = (
     return await getConfig(gatewayConfig);
   },
   inject: inject || [ConfigService],
-  imports: [],
 });
