@@ -11,11 +11,15 @@ export interface RequestContext {
 // AsyncLocalStorage로 요청별 컨텍스트 관리
 export const requestContext = new AsyncLocalStorage<RequestContext>();
 
+export const asyncLocalStorage = new AsyncLocalStorage<Map<string, any>>();
+
 /**
  * 현재 요청의 traceId를 가져옵니다
  */
 export const getTraceId = (): string | undefined => {
   return requestContext.getStore()?.traceId;
+
+  // return asyncLocalStorage.getStore()?.get('traceId');
 };
 
 /**

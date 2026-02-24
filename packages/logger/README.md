@@ -16,6 +16,27 @@ Winston 기반 NestJS 공유 로거 패키지 with Request Context Tracking
 pnpm add '@repo/logger@workspace:*'
 ```
 
+## 🔍 전체 구조
+
+```
+[HTTP Request]
+  ↓
+Middleware (traceId 생성)
+  ↓
+AsyncLocalStorage 저장
+  ↓
+Interceptor (log)
+  ↓
+gRPC 호출 (metadata에 traceId 추가)
+  ↓
+Service (gRPC interceptor로 traceId 복원)
+  ↓
+AsyncLocalStorage 저장
+  ↓
+Service 내부 로깅
+
+```
+
 ## 🚀 빠른 시작
 
 ### 1. 모듈 등록
@@ -195,7 +216,7 @@ import type { Logger } from 'winston';
 export class AdvancedService {
   constructor(
     @Inject(WINSTON_MODULE_PROVIDER)
-    private readonly logger: Logger
+    private readonly logger: Logger,
   ) {}
 
   doSomething() {

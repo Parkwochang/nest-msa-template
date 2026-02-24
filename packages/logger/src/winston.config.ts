@@ -35,6 +35,8 @@ export interface WinstonConfigOptions {
   maxSize?: string;
   /** 파일 보관 기간 (기본값: '14d') */
   maxFiles?: string;
+  /** NODE_ENV 값 (내부 사용, forRootAsync에서 주입) */
+  nodeEnv?: string;
 }
 
 // 로그 레벨별 이모지
@@ -104,9 +106,10 @@ export const createWinstonConfig = (options: WinstonConfigOptions): LoggerOption
     logDir = 'logs',
     maxSize = '100m',
     maxFiles = '14d',
+    nodeEnv = process.env.NODE_ENV,
   } = options;
 
-  const isDevelopment = process.env.NODE_ENV !== 'production';
+  const isDevelopment = nodeEnv !== 'production';
 
   // 콘솔 트랜스포트 - 환경별 분리
   const consoleTransport = new winston.transports.Console({
@@ -187,7 +190,7 @@ export const createWinstonConfig = (options: WinstonConfigOptions): LoggerOption
       : undefined, // console transport가 자체 format 사용
     defaultMeta: {
       service: serviceName,
-      env: process.env.NODE_ENV || 'development',
+      env: nodeEnv || 'development',
     },
     transports,
   };

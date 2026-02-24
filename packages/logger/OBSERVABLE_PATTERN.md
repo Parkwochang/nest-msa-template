@@ -80,15 +80,15 @@ return new Observable((subscriber) => {
 ```
 ┌─────────────────────────────────────────────┐
 │ 외부 Observable (new Observable)            │  ← NestJS가 subscribe
-│                                              │
+│                                             │
 │  ┌───────────────────────────────────────┐  │
 │  │ 내부 Observable (next.handle())       │  │  ← 우리가 subscribe
-│  │                                        │  │
+│  │                                       │  │
 │  │  Controller → Service → Repository    │  │
-│  │                                        │  │
+│  │                                       │  │
 │  └───────────────────────────────────────┘  │
 │           ↓ subscriber.next(value)          │
-│       외부로 데이터 전달                     │
+│       외부로 데이터 전달                    │
 └─────────────────────────────────────────────┘
          ↓
      NestJS가 받아서 응답 전송
