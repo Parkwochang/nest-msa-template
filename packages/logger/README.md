@@ -16,16 +16,14 @@ Winston 기반 NestJS 공유 로거 패키지 with Request Context Tracking
 pnpm add '@repo/logger@workspace:*'
 ```
 
-## 🔍 전체 구조
+## 🔍 실행 흐름
 
 ```
 [HTTP Request]
   ↓
-Middleware (traceId 생성)
+Interceptor (traceId 생성)
   ↓
-AsyncLocalStorage 저장
-  ↓
-Interceptor (log)
+AsyncLocalStorage 초기화
   ↓
 gRPC 호출 (metadata에 traceId 추가)
   ↓
@@ -35,6 +33,42 @@ AsyncLocalStorage 저장
   ↓
 Service 내부 로깅
 
+```
+
+```mermaid
+sequenceDiagram
+    participant C as Client
+    box "API Gateway" #f9f9f9
+    participant H_INT as TraceInterceptor (HTTP)
+    participant G_SVC as UserGrpcService
+    end
+
+    box "User Service" #e1f5fe
+    participant R_INT as TraceInterceptor (RPC)
+    participant US as User Service Logic
+    end
+
+    C->>H_INT: HTTP 요청 수신
+    Note over H_INT: switchToHttp() 호출<br/>traceId 생성 및 context 설정
+
+    H_INT->>G_SVC: UserGrpcService.findAll() 호출
+    Note over G_SVC: metadata에 traceId 삽입
+
+    G_SVC-->>R_INT: gRPC 요청 전송 (with Metadata)
+
+    Note over R_INT: switchToRpc() 호출<br/>metadata에서 traceId 추출
+    R_INT->>US: 비즈니스 로직 실행
+```
+
+```
+1. TraceInterceptor: requestContext.run({ traceId }, () => { ... })
+   → getStore() = { traceId }
+
+2. Guard: setRequestContext({ userId: '123' })
+   → getStore() = { traceId, userId: '123' }
+
+3. Service: setRequestContext({ orderId: 'order-456' })
+   → getStore() = { traceId, userId: '123', orderId: 'order-456' }
 ```
 
 ## 🚀 빠른 시작

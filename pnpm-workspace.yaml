@@ -20,6 +20,7 @@ catalogs:
     '@nestjs/testing': ^11.0.1
     reflect-metadata: ^0.2.2
     minio: ^8.0.5
+    '@nestjs/terminus': ^11.1.1
 
   logger:
     nest-winston: ^1.9.7
@@ -71,3 +72,7 @@ catalogs:
 
   redis:
     ioredis: ^5.9.3
+
+  circuit-breaker:
+    opossum: ^9.0.0
+    '@types/opossum': ^8.1.9

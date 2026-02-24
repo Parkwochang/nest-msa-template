@@ -1,4 +1,4 @@
-import { ConfigService, ConfigType } from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
 import { Transport } from '@nestjs/microservices';
 import type { ClientOptions, GrpcOptions } from '@nestjs/microservices';
 

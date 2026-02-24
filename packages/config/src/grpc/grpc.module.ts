@@ -45,7 +45,6 @@ export class GrpcModule {
 
     return {
       module: GrpcModule,
-      global: true,
       imports: [
         ClientsModule.register(
           clients.map(({ name, ...rest }) => ({
@@ -95,7 +94,6 @@ export class GrpcModule {
 
     return {
       module: GrpcModule,
-      global: true,
       imports: options.flatMap((o) => o.imports || []),
       providers,
       exports: providers,

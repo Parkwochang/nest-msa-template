@@ -15,6 +15,7 @@ import {
   GRPC_SERVICE,
   GrpcModule,
 } from '@repo/config/grpc';
+import { HealthModule } from '@repo/config/health';
 import { PROTO_PATHS } from '@repo/proto';
 
 import { AppController } from '@/app.controller';
@@ -66,6 +67,7 @@ import { UserModule } from '@/user/user.module';
 
     // Feature Modules
     UserModule,
+    HealthModule,
   ],
   controllers: [AppController],
   providers: [
