@@ -26,8 +26,8 @@ async function bootstrap() {
   app.connectMicroservice(
     connectGrpcServer({
       url: appConfig.GRPC_URL,
-      protoPath: PROTO_PATHS.USER,
-      package: GRPC_PACKAGE.USER,
+      protoPath: [PROTO_PATHS.USER, PROTO_PATHS.HEALTH],
+      package: [GRPC_PACKAGE.USER, GRPC_PACKAGE.HEALTH],
     }),
     { inheritAppConfig: true },
   );

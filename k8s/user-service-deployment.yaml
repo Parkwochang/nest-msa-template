@@ -1,0 +1,105 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service
+  labels:
+    app: user-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: user-service
+  template:
+    metadata:
+      labels:
+        app: user-service
+    spec:
+      containers:
+        - name: user-service
+          image: user-service:latest
+          ports:
+            - name: grpc
+              containerPort: 5001
+              protocol: TCP
+            - name: http
+              containerPort: 3001
+              protocol: TCP
+          env:
+            - name: GRPC_URL
+              value: '0.0.0.0:5001'
+            - name: HTTP_PORT
+              value: '3001'
+          # 방법 1: Kubernetes 1.23+ 네이티브 gRPC Probe (권장)
+          livenessProbe:
+            grpc:
+              port: 5001
+              service: user.UserService # 체크할 서비스 이름 (package.service 형식)
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            grpc:
+              port: 5001
+              service: user.UserService
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+          # 방법 2: grpc-health-probe 사용 (Kubernetes 1.23 미만 또는 더 세밀한 제어)
+          # livenessProbe:
+          #   exec:
+          #     command:
+          #       - /bin/grpc-health-probe
+          #       - -addr=:5001
+          #       - -service=user.UserService
+          #   initialDelaySeconds: 10
+          #   periodSeconds: 10
+          #   timeoutSeconds: 5
+          # readinessProbe:
+          #   exec:
+          #     command:
+          #       - /bin/grpc-health-probe
+          #       - -addr=:5001
+          #       - -service=user.UserService
+          #   initialDelaySeconds: 5
+          #   periodSeconds: 5
+          #   timeoutSeconds: 3
+          # 방법 3: HTTP 헬스체크 (현재 방식 - gRPC 서버 상태는 확인 안 함)
+          # livenessProbe:
+          #   httpGet:
+          #     path: /health/live
+          #     port: 3001
+          #   initialDelaySeconds: 10
+          #   periodSeconds: 10
+          # readinessProbe:
+          #   httpGet:
+          #     path: /health/ready
+          #     port: 3001
+          #   initialDelaySeconds: 5
+          #   periodSeconds: 5
+          resources:
+            requests:
+              memory: '1.5Gi'
+              cpu: '500m'
+            limits:
+              memory: '2Gi'
+              cpu: '1000m'
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service
+spec:
+  type: ClusterIP
+  ports:
+    - name: grpc
+      port: 5001
+      targetPort: 5001
+      protocol: TCP
+    - name: http
+      port: 3001
+      targetPort: 3001
+      protocol: TCP
+  selector:
+    app: user-service

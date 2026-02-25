@@ -1,4 +1,3 @@
-import { ConfigService } from '@nestjs/config';
 import { Transport } from '@nestjs/microservices';
 import type { ClientOptions, GrpcOptions } from '@nestjs/microservices';
 
@@ -32,9 +31,7 @@ export function connectGrpcServer(config: GrpcClientConfig): GrpcOptions {
   return {
     transport: Transport.GRPC,
     options: {
-      url: config.url,
-      protoPath: config.protoPath,
-      package: config.package,
+      ...config,
       loader: DEFAULT_LOADER_OPTIONS,
       channelOptions: DEFAULT_CHANNEL_OPTIONS,
     },

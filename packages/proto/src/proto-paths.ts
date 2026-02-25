@@ -54,4 +54,5 @@ export const PROTO_PATHS = {
   USER: getProtoPath('user.proto'),
   ORDER: getProtoPath('order.proto'),
   PRODUCT: getProtoPath('product.proto'),
+  HEALTH: getProtoPath('health.proto'),
 } as const;

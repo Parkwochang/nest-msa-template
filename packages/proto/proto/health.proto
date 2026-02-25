@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package grpc.health.v1;
+
+/**
+ * gRPC Health Checking Protocol
+ * @see https://github.com/grpc/grpc/blob/master/doc/health-checking.md
+ */
+service Health {
+  // 서비스의 헬스 상태를 확인합니다
+  rpc Check(HealthCheckRequest) returns (HealthCheckResponse);
+
+  // 서비스의 헬스 상태를 스트리밍으로 확인합니다 (선택사항)
+  rpc Watch(HealthCheckRequest) returns (stream HealthCheckResponse);
+}
+
+message HealthCheckRequest {
+  // 체크할 서비스 이름 (빈 문자열이면 전체 서비스 상태)
+  string service = 1;
+}
+
+message HealthCheckResponse {
+  enum ServingStatus {
+    UNKNOWN = 0;
+    SERVING = 1;
+    NOT_SERVING = 2;
+    SERVICE_UNKNOWN = 3; // 요청한 서비스가 존재하지 않음
+  }
+  ServingStatus status = 1;
+}

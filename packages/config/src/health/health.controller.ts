@@ -1,5 +1,9 @@
 import { Controller, Get } from '@nestjs/common';
-import { HealthCheckService, HealthCheck, MemoryHealthIndicator, DiskHealthIndicator } from '@nestjs/terminus';
+import { HealthCheckService, HealthCheck } from '@nestjs/terminus';
+
+import { HealthService } from './health.service';
+
+// ----------------------------------------------------------------------------
 
 /**
  * Health Check Controller
@@ -8,33 +12,26 @@ import { HealthCheckService, HealthCheck, MemoryHealthIndicator, DiskHealthIndic
 @Controller('health')
 export class HealthController {
   constructor(
+    private readonly healthService: HealthService,
     private readonly health: HealthCheckService,
-    private readonly memory: MemoryHealthIndicator,
-    private readonly disk: DiskHealthIndicator,
   ) {}
 
   /**
    * Liveness Probe
    * @description 파드가 살아있는지 확인 (Kubernetes livenessProbe)
-   * @returns {Promise<HealthCheckResult>}
    * @example
    * GET /health/live
    */
   @Get('live')
   @HealthCheck()
   liveness() {
-    return this.health.check([
-      // 메모리 체크: 힙 메모리가 1.5GB 이하인지 확인
-      () => this.memory.checkHeap('memory_heap', 1500 * 1024 * 1024),
-      // RSS 메모리 체크: RSS 메모리가 3GB 이하인지 확인
-      () => this.memory.checkRSS('memory_rss', 3000 * 1024 * 1024),
-    ]);
+    return this.health.check([]);
   }
 
   /**
    * Readiness Probe
    * @description 파드가 트래픽을 받을 준비가 되었는지 확인 (Kubernetes readinessProbe)
-   * @returns {Promise<HealthCheckResult>}
+   * @description API Gateway의 경우: 연결된 gRPC 서비스들의 연결 상태도 확인
    * @example
    * GET /health/ready
    */
@@ -42,21 +39,17 @@ export class HealthController {
   @HealthCheck()
   readiness() {
     return this.health.check([
-      // 디스크 체크: 디스크 사용량이 90% 이하인지 확인
-      () =>
-        this.disk.checkStorage('storage', {
-          path: '/',
-          thresholdPercent: 0.9,
-        }),
-      // 메모리 체크
-      () => this.memory.checkHeap('memory_heap', 1500 * 1024 * 1024),
+      this.healthService.checkStorage,
+      this.healthService.checkMemory,
+      // API Gateway인 경우 gRPC 서비스 연결 상태 확인 (선택적)
+      // this.healthService.checkUserService,
     ]);
   }
 
   /**
    * Health Check (일반)
    * @description 전체 health check
-   * @returns {Promise<HealthCheckResult>}
+   * @description API Gateway의 경우: 연결된 gRPC 서비스들의 연결 상태도 확인
    * @example
    * GET /health
    */
@@ -64,13 +57,11 @@ export class HealthController {
   @HealthCheck()
   check() {
     return this.health.check([
-      () => this.memory.checkHeap('memory_heap', 1500 * 1024 * 1024),
-      () => this.memory.checkRSS('memory_rss', 3000 * 1024 * 1024),
-      () =>
-        this.disk.checkStorage('storage', {
-          path: '/',
-          thresholdPercent: 0.9,
-        }),
+      this.healthService.checkStorage,
+      this.healthService.checkMemory,
+      this.healthService.checkRSS,
+      // API Gateway인 경우 gRPC 서비스 연결 상태 확인 (선택적)
+      // this.healthService.checkUserService,
     ]);
   }
 }

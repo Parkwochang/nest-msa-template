@@ -1,6 +1,7 @@
 export const GRPC_PACKAGE = {
   USER: 'user',
   ORDER: 'order',
+  HEALTH: 'grpc.health.v1',
 };
 
 export const GRPC_SERVICE = {
