@@ -1,7 +1,7 @@
 import { Controller, Get, Inject } from '@nestjs/common';
+
 import { GATEWAY_CONFIG, GatewayConfigType } from '@repo/config/env';
 import { GRPC_PACKAGE, GRPC_SERVICE } from '@repo/config/grpc';
-
 import {
   HealthCheck,
   HealthCheckResult,
@@ -49,8 +49,12 @@ export class GatewayHealthController {
     return this.terminus.check([
       this.healthService.checkStorage,
       this.healthService.checkMemory,
-      // API Gateway인 경우 gRPC 서비스 연결 상태 확인 (선택적)
-      // this.healthService.checkUserService,
+
+      this.healthService.checkServiceHealth(GRPC_SERVICE.USER, 'readiness', {
+        url: this.config.USER_GRPC_URL,
+        package: GRPC_PACKAGE.USER,
+        protoPath: PROTO_PATHS.USER,
+      }),
     ]);
   }
 

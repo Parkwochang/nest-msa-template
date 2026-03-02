@@ -1,4 +1,4 @@
-import { Module, type DynamicModule } from '@nestjs/common';
+import { Global, Module, type DynamicModule } from '@nestjs/common';
 import { WinstonModule } from 'nest-winston';
 
 import { createWinstonConfig, type WinstonConfigOptions } from './winston.config';
@@ -29,11 +29,11 @@ import { createWinstonConfig, type WinstonConfigOptions } from './winston.config
  * })
  */
 
+@Global()
 @Module({})
 export class LoggerModule {
   static forRoot(options: WinstonConfigOptions): DynamicModule {
     return {
-      global: true,
       module: LoggerModule,
       imports: [WinstonModule.forRoot(createWinstonConfig(options))],
       exports: [WinstonModule],
@@ -42,15 +42,13 @@ export class LoggerModule {
 
   static forRootAsync(options: Omit<WinstonConfigOptions, 'nodeEnv'>): DynamicModule {
     return {
-      global: true,
       module: LoggerModule,
       imports: [
         WinstonModule.forRootAsync({
           inject: ['ConfigService'],
           useFactory: (configService: { get: (key: string) => string | undefined }) => {
-            // ConfigService에서 환경 변수 가져오기
-            const nodeEnv = configService.get('NODE_ENV') || process.env.NODE_ENV;
-            const logLevel = configService.get('LOG_LEVEL') || process.env.LOG_LEVEL;
+            const nodeEnv = configService.get('NODE_ENV');
+            const logLevel = configService.get('LOG_LEVEL');
 
             return createWinstonConfig({
               ...options,

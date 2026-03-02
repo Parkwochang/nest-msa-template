@@ -1,5 +1,6 @@
-import { Injectable, NestInterceptor, ExecutionContext, CallHandler } from '@nestjs/common';
-import { Observable } from 'rxjs';
+import { CallHandler, ExecutionContext, Inject, Injectable, type LoggerService, NestInterceptor } from '@nestjs/common';
+import { finalize, Observable } from 'rxjs';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 import { requestContext, generateTraceId } from './trace.context';
 
@@ -20,8 +21,14 @@ import { requestContext, generateTraceId } from './trace.context';
  */
 @Injectable()
 export class TraceInterceptor implements NestInterceptor {
+  constructor(
+    @Inject(WINSTON_MODULE_NEST_PROVIDER)
+    private readonly logger: LoggerService,
+  ) {}
+
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const contextType = context.getType();
+    const start = Date.now();
 
     let traceId: string;
 
@@ -46,11 +53,54 @@ export class TraceInterceptor implements NestInterceptor {
     return new Observable((subscriber) => {
       // 동기 실행 컨텍스트에 traceId를 설정하여 전체 요청 생명주기 동안 사용
       requestContext.run({ traceId }, () => {
-        next.handle().subscribe({
-          next: (value) => subscriber.next(value),
-          error: (error) => subscriber.error(error),
-          complete: () => subscriber.complete(),
-        });
+        next
+          .handle()
+          .pipe(
+            finalize(() => {
+              const latencyMs = Date.now() - start;
+
+              if (contextType === 'http') {
+                const request = context.switchToHttp().getRequest<{
+                  method?: string;
+                  originalUrl?: string;
+                  url?: string;
+                }>();
+                const response = context.switchToHttp().getResponse<{ statusCode?: number }>();
+
+                this.logger.log('request completed', {
+                  context: TraceInterceptor.name,
+                  transport: 'http',
+                  method: request?.method,
+                  path: request?.originalUrl ?? request?.url,
+                  statusCode: response?.statusCode,
+                  latencyMs,
+                });
+                return;
+              }
+
+              if (contextType === 'rpc') {
+                const rpc = context.getHandler();
+                this.logger.log('request completed', {
+                  context: TraceInterceptor.name,
+                  transport: 'rpc',
+                  handler: rpc?.name,
+                  latencyMs,
+                });
+                return;
+              }
+
+              this.logger.log('request completed', {
+                context: TraceInterceptor.name,
+                transport: String(contextType),
+                latencyMs,
+              });
+            }),
+          )
+          .subscribe({
+            next: (value) => subscriber.next(value),
+            error: (error) => subscriber.error(error),
+            complete: () => subscriber.complete(),
+          });
       });
     });
   }

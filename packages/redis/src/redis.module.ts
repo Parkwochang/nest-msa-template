@@ -19,20 +19,14 @@ export class RedisModule {
       providers: [
         {
           provide: REDIS_CACHE,
-          useFactory: (configService: ConfigService) => {
-            const redisConfig = configService.get<CommonConfigType>(COMMON_CONFIG.KEY);
-
-            if (!redisConfig) {
-              throw new Error('Redis config is required');
-            }
-
+          useFactory: (commonConfig: CommonConfigType) => {
             return new Redis({
-              host: redisConfig.REDIS_HOST,
-              port: redisConfig.REDIS_PORT,
+              host: commonConfig.REDIS_HOST,
+              port: commonConfig.REDIS_PORT,
               connectTimeout: 5000,
             });
           },
-          inject: [ConfigService],
+          inject: [COMMON_CONFIG.KEY],
         },
         RedisService,
       ],

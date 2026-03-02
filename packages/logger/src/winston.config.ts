@@ -52,6 +52,7 @@ const levelEmoji: Record<string, string> = {
 
 // 개발 환경용 읽기 쉬운 로그 포맷
 const developmentFormat = printf(({ level, message, timestamp, context, trace, service, ...metadata }) => {
+  console.log(level, message, timestamp, context, trace, service, metadata);
   const traceId = getTraceId();
   const traceIdStr = traceId ? `\x1b[90m[${traceId.substring(0, 8)}]\x1b[0m` : '';
   const requestCtx = getRequestContext();

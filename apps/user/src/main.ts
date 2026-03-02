@@ -7,7 +7,7 @@ import { WINSTON_MODULE_NEST_PROVIDER } from '@repo/logger';
 import { connectGrpcServer } from '@repo/config/grpc';
 import { GRPC_PACKAGE } from '@repo/config/grpc';
 import { APP_CONFIG } from '@repo/config/env';
-import { GlobalGrpcExceptionFilter } from '@repo/errors';
+// import { GlobalGrpcExceptionFilter } from '@repo/errors';
 
 import { AppModule } from './app.module';
 
@@ -32,7 +32,7 @@ async function bootstrap() {
     }),
     { inheritAppConfig: true },
   );
-  grpcMicroservice.useGlobalFilters(new GlobalGrpcExceptionFilter());
+  // grpcMicroservice.useGlobalFilters(new GlobalGrpcExceptionFilter());
 
   // gRPC 서버 시작
   await app.startAllMicroservices();

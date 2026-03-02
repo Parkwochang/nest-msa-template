@@ -44,7 +44,7 @@ export class PrismaService {
   constructor(private readonly configService: ConfigService) {
     // 타입 안전한 접근
     const dbConfig = this.configService.get<DatabaseConfig>('database');
-    
+
     // 사용
     const databaseUrl = dbConfig.url;
     const host = dbConfig.host;
@@ -99,7 +99,7 @@ export class PrismaService {
   constructor(private readonly configService: ConfigService) {
     // 타입 안전한 접근
     const dbConfig = this.configService.get<DatabaseConfig>('database');
-    
+
     if (!dbConfig) {
       throw new Error('Database configuration is missing');
     }
@@ -136,7 +136,7 @@ export class RedisModule {
           useFactory: (configService: ConfigService) => {
             // 타입 안전한 접근
             const redisConfig = configService.get<RedisConfig>('redis');
-            
+
             if (!redisConfig) {
               throw new Error('Redis configuration is missing');
             }
@@ -175,7 +175,7 @@ export class AuthService {
 
   generateToken(userId: string) {
     const jwtConfig = this.configService.get<JwtConfig>('jwt');
-    
+
     return this.jwtService.sign(
       { userId },
       {
@@ -201,7 +201,7 @@ export class GrpcService {
 
   getUserServiceUrl() {
     const grpcConfig = this.configService.get<GrpcConfig>('grpc');
-    
+
     // 옵셔널 체이닝으로 안전하게 접근
     return grpcConfig?.userService?.url;
   }
@@ -227,7 +227,7 @@ export class AppService {
 
   getAppInfo() {
     const appConfig = this.configService.get<AppConfig>('app');
-    
+
     return {
       name: appConfig.name,
       version: appConfig.version,
@@ -244,13 +244,7 @@ export class AppService {
 
 ```typescript
 // 설정 타입 import
-import { 
-  DatabaseConfig,
-  RedisConfig,
-  JwtConfig,
-  GrpcConfig,
-  AppConfig 
-} from '@repo/config/config';
+import { DatabaseConfig, RedisConfig, JwtConfig, GrpcConfig, AppConfig } from '@repo/config/config';
 ```
 
 ## 5. 주의사항
