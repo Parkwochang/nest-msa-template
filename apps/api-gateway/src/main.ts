@@ -10,7 +10,11 @@ import { AppModule } from './app.module';
 // ----------------------------------------------------------------------------
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    snapshot: true,
+    // abortOnError: false,
+  });
+
   const gatewayConfig = app.get<GatewayConfigType>(GATEWAY_CONFIG.KEY);
 
   // Winston을 NestJS 기본 로거로 설정
@@ -18,10 +22,11 @@ async function bootstrap() {
 
   // CORS 설정
   app.enableCors({
-    origin: ['http://localhost:3000', 'domain'],
+    // origin: ['http://localhost:3000', 'domain'],
+    origin: '*',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     maxAge: 86400,
-    credentials: true,
+    // credentials: true,
   });
 
   // 버전 관리 설정

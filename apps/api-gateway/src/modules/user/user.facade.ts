@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class UserFacade {
-  constructor(private userGrpc: UserGrpcService) {}
+  constructor(private readonly userGrpc: UserGrpcService) {}
 
   async findAll() {
     return this.userGrpc.findAll({});

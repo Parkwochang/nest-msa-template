@@ -6,7 +6,7 @@ import { PROTO_PATHS } from '@repo/proto';
 import { WINSTON_MODULE_NEST_PROVIDER } from '@repo/logger';
 import { connectGrpcServer, GRPC_PACKAGE } from '@repo/config/grpc';
 import { APP_CONFIG } from '@repo/config/env';
-import { GlobalGrpcExceptionFilter } from '@repo/errors';
+// import { GlobalGrpcExceptionFilter } from '@repo/errors';
 
 import { AppModule } from './app.module';
 
@@ -29,7 +29,7 @@ async function bootstrap() {
       package: GRPC_PACKAGE.USER,
     }),
   );
-  grpcMicroservice.useGlobalFilters(new GlobalGrpcExceptionFilter());
+  // grpcMicroservice.useGlobalFilters(new GlobalGrpcExceptionFilter());
 
   await app.startAllMicroservices();
 

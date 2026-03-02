@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 
 import { LoggerModule, TraceInterceptor } from '@repo/logger';
-import { ConfigModule } from '@repo/config/env';
+import { AppConfigModule } from '@repo/config/env';
 import { RedisModule } from '@repo/redis';
 
 import { AppController } from './app.controller';
@@ -12,7 +12,7 @@ import { InfraModule } from '@/infra/infra.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
+    AppConfigModule.forRoot({
       appType: 'grpc',
     }),
     LoggerModule.forRoot({

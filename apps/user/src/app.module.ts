@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 
 import { LoggerModule, TraceInterceptor } from '@repo/logger';
-import { ConfigModule } from '@repo/config/env';
-import { GrpcHealthModule } from '@repo/config/health';
+import { AppConfigModule } from '@repo/config/env';
+// import { GrpcHealthModule } from '@repo/config/health';
 import { GRPC_SERVICE } from '@repo/config/grpc';
 
 import { AppController } from './app.controller';
@@ -14,7 +14,7 @@ import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
+    AppConfigModule.forRoot({
       appType: 'grpc',
     }),
 
@@ -22,7 +22,7 @@ import { UserModule } from './modules/user/user.module';
       serviceName: GRPC_SERVICE.USER,
       disableFileLog: process.env.NODE_ENV === 'production',
     }),
-    GrpcHealthModule,
+    // GrpcHealthModule,
 
     // Feature Modules
     UserModule,

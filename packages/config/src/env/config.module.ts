@@ -1,4 +1,4 @@
-import { type DynamicModule, Module } from '@nestjs/common';
+import { type DynamicModule, Global, Module } from '@nestjs/common';
 import { type ConfigFactory, ConfigModule as NestConfigModule } from '@nestjs/config';
 
 import { COMMON_CONFIG, APP_CONFIG, GATEWAY_CONFIG, AppConfigSchema, GatewayConfigSchema } from './index';
@@ -51,14 +51,14 @@ export interface ConfigModuleOptions {
  * })
  */
 
+@Global()
 @Module({})
-export class ConfigModule {
+export class AppConfigModule {
   static forRoot(options: ConfigModuleOptions = {}): DynamicModule {
     const { envFilePath = ['.env', '.env.local'], envKey = 'NODE_ENV', appType = 'api', load } = options;
 
     return {
-      global: true,
-      module: ConfigModule,
+      module: AppConfigModule,
       imports: [
         NestConfigModule.forRoot({
           isGlobal: true,
