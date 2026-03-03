@@ -406,6 +406,9 @@ importers:
       '@nestjs/platform-express':
         specifier: catalog:nestjs
         version: 11.1.10(@nestjs/common@11.1.10(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.10)
+      '@prisma/client':
+        specifier: catalog:prisma
+        version: 7.4.0(prisma@7.4.0(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2)
       '@repo/config':
         specifier: workspace:*
         version: link:../../packages/config
@@ -421,9 +424,6 @@ importers:
       nestjs-zod:
         specifier: catalog:validation
         version: 4.3.1(@nestjs/common@11.1.10(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.10)(zod@3.25.76)
-      prisma:
-        specifier: catalog:prisma
-        version: 7.4.0(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2)
       reflect-metadata:
         specifier: catalog:nestjs
         version: 0.2.2
@@ -482,6 +482,9 @@ importers:
       prettier:
         specifier: 'catalog:'
         version: 3.7.4
+      prisma:
+        specifier: catalog:prisma
+        version: 7.4.0(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2)
       source-map-support:
         specifier: ^0.5.21
         version: 0.5.21

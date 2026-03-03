@@ -5,6 +5,7 @@ import { LoggerModule, TraceInterceptor } from '@repo/logger';
 import { AppConfigModule } from '@repo/config/env';
 // import { GrpcHealthModule } from '@repo/config/health';
 import { GRPC_SERVICE } from '@repo/config/grpc';
+import { GrpcHealthModule } from '@repo/config/health';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -24,7 +25,7 @@ import { UserModule } from './modules/user/user.module';
         enabled: process.env.NODE_ENV !== 'production',
       },
     }),
-    // GrpcHealthModule,
+    GrpcHealthModule,
 
     // Feature Modules
     UserModule,
