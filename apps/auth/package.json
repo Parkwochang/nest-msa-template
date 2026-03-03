@@ -10,7 +10,7 @@
     "start": "nest start",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
+    "start:prod": "NODE_ENV=production node dist/main",
     "schema": "npx prisma generate",
     "schema:prod": "env-cmd -f .env.production npx prisma generate",
     "migrate": "env-cmd -f .env.development npx prisma migrate dev",
