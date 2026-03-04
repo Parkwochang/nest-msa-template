@@ -3,16 +3,8 @@ import { GrpcMethod } from '@nestjs/microservices';
 
 import { User } from '@repo/proto';
 
-import { UserService } from './user.service';
+import { UserService } from '@/domains/user/application';
 
-// ----------------------------------------------------------------------------
-
-/**
- * User gRPC Controller
- *
- * @description
- * API Gateway로부터 gRPC 요청을 받아 처리하는 컨트롤러
- */
 @Controller()
 export class UserController implements User.UserServiceController {
   private readonly logger = new Logger(UserController.name);

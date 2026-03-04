@@ -9,7 +9,7 @@ import { GrpcHealthModule } from '@repo/config/health';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UserModule } from './modules/user/user.module';
+import { UserModule } from './domains/user';
 
 // ----------------------------------------------------------------------------
 

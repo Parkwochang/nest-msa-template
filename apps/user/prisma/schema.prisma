@@ -1,9 +1,52 @@
 generator client {
   provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  output   = "../src/infra/persistence/prisma/generated"
   moduleFormat = "cjs"
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+model User {
+  id          String   @id @default(uuid())
+  email       String   @unique
+  name        String
+  status      UserStatus @default(ACTIVE)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  profile     UserProfile?
+  sessions    UserSession[]
+
+  @@index([status])
+}
+
+model UserProfile {
+  id        String  @id @default(uuid())
+  userId    String  @unique
+  bio       String?
+  phone     String?
+  address   String?
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model UserSession {
+  id          String   @id @default(uuid())
+  userId      String
+  refreshHash String
+  ip          String?
+  userAgent   String?
+  expiresAt   DateTime
+  createdAt   DateTime @default(now())
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, expiresAt])
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  BANNED
 }

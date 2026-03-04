@@ -406,6 +406,9 @@ importers:
       '@nestjs/platform-express':
         specifier: catalog:nestjs
         version: 11.1.10(@nestjs/common@11.1.10(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.10)
+      '@prisma/adapter-pg':
+        specifier: catalog:prisma
+        version: 7.4.0
       '@prisma/client':
         specifier: catalog:prisma
         version: 7.4.0(prisma@7.4.0(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2)
@@ -424,6 +427,9 @@ importers:
       nestjs-zod:
         specifier: catalog:validation
         version: 4.3.1(@nestjs/common@11.1.10(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.10)(zod@3.25.76)
+      pg:
+        specifier: catalog:prisma
+        version: 8.18.0
       reflect-metadata:
         specifier: catalog:nestjs
         version: 0.2.2
@@ -464,6 +470,9 @@ importers:
       '@types/node':
         specifier: ^22.10.7
         version: 22.19.3
+      '@types/pg':
+        specifier: catalog:prisma
+        version: 8.16.0
       '@types/supertest':
         specifier: ^6.0.2
         version: 6.0.3
