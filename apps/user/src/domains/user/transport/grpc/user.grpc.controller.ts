@@ -25,6 +25,8 @@ export class UserController implements User.UserServiceController {
 
   @GrpcMethod('UserService', 'FindOne')
   async findOne(data: FindOneUserQueryDto): Promise<User.UserResponse> {
+    this.logger.info('findOne() called', { data });
+
     if (data.id) {
       this.logger.info(`Finding user with id: ${data.id}`, { userId: data.id });
 

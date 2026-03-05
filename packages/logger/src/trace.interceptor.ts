@@ -1,6 +1,5 @@
-import { CallHandler, ExecutionContext, Inject, Injectable, type LoggerService, NestInterceptor } from '@nestjs/common';
-import { finalize, Observable } from 'rxjs';
-import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
+import { finalize, Observable, tap } from 'rxjs';
 
 import { requestContext, generateTraceId } from './trace.context';
 import { AppLogger } from './app-logger.service';
@@ -22,10 +21,7 @@ import { AppLogger } from './app-logger.service';
  */
 @Injectable()
 export class TraceInterceptor implements NestInterceptor {
-  constructor(
-    @Inject(WINSTON_MODULE_NEST_PROVIDER)
-    private readonly logger: AppLogger,
-  ) {
+  constructor(private readonly logger: AppLogger) {
     this.logger.setContext(TraceInterceptor.name);
   }
 
@@ -59,6 +55,38 @@ export class TraceInterceptor implements NestInterceptor {
         next
           .handle()
           .pipe(
+            tap({
+              error: (error: unknown) => {
+                const message = error instanceof Error ? error.message : 'Unhandled request error';
+
+                if (contextType === 'http') {
+                  const request = context.switchToHttp().getRequest<{
+                    method?: string;
+                    originalUrl?: string;
+                    url?: string;
+                  }>();
+                  this.logger.error(message, {
+                    transport: 'http',
+                    method: request?.method,
+                    path: request?.originalUrl ?? request?.url,
+                  });
+                  return;
+                }
+
+                if (contextType === 'rpc') {
+                  const rpc = context.getHandler();
+                  this.logger.error(message, {
+                    transport: 'rpc',
+                    handler: rpc?.name,
+                  });
+                  return;
+                }
+
+                this.logger.error(message, {
+                  transport: String(contextType),
+                });
+              },
+            }),
             finalize(() => {
               const latencyMs = Date.now() - start;
 

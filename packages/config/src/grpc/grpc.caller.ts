@@ -60,10 +60,6 @@ export class GrpcCaller {
     });
   }
 
-  private async execute<T>(fn: () => Promise<T>) {
-    return fn();
-  }
-
   async call<T>(fn: () => Observable<T>, options?: GrpcCallerOptions): Promise<T> {
     const retryCount = options?.retry ?? DEFAULT_RETRY_COUNT;
 
@@ -100,6 +96,10 @@ export class GrpcCaller {
         ),
       ),
     ) as Promise<T>;
+  }
+
+  private async execute<T>(fn: () => Promise<T>) {
+    return fn();
   }
 
   private mapError(err: unknown) {

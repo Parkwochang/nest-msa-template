@@ -35,6 +35,9 @@ interface GrpcErrorResponse {
 @Catch()
 export class GlobalGrpcExceptionFilter implements ExceptionFilter<unknown> {
   catch(exception: unknown): never {
+    const mapped = mapUnknownToGrpcError(exception);
+
+    console.log('exception', mapped.code, mapped.message, mapped.details, mapped.errorCode, mapped);
     throw new RpcException(mapUnknownToGrpcError(exception));
   }
 }
@@ -187,9 +190,7 @@ function errorCodeToGrpcStatus(errorCode: ErrorCode): GrpcStatusCode {
 }
 
 function toGrpcStatusCode(value: number): GrpcStatusCode {
-  return Object.values(GRPC_STATUS).includes(value as GrpcStatusCode)
-    ? (value as GrpcStatusCode)
-    : GRPC_STATUS.UNKNOWN;
+  return Object.values(GRPC_STATUS).includes(value as GrpcStatusCode) ? (value as GrpcStatusCode) : GRPC_STATUS.UNKNOWN;
 }
 
 function isErrorCode(value: unknown): value is ErrorCode {

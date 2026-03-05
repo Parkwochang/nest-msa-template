@@ -1,10 +1,18 @@
 import z from 'zod';
 import { createZodDto } from 'nestjs-zod/dto';
 
+const emptyToUndefined = (v: unknown) => (v ? undefined : v);
+
 const FindOneSchema = z
   .object({
-    id: z.string().uuid().optional(),
-    email: z.string().email().optional(),
+    id: z.preprocess(
+      emptyToUndefined,
+      z.string().uuid('ID 형식이 올바르지 않습니다.').optional(),
+    ),
+    email: z.preprocess(
+      emptyToUndefined,
+      z.string().email('이메일 형식이 올바르지 않습니다.').optional(),
+    ),
   })
   .refine((v) => Number(Boolean(v.id)) + Number(Boolean(v.email)) === 1, {
     message: 'id or email 중 정확히 하나만 보내야 합니다.',

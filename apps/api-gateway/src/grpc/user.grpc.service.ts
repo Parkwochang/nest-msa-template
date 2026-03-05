@@ -4,7 +4,7 @@ import { Metadata } from '@grpc/grpc-js';
 
 import { User } from '@repo/proto';
 import { GRPC_SERVICE, GrpcCaller } from '@repo/config/grpc';
-import { getTraceId } from '@repo/logger';
+import { AppLogger, getTraceId } from '@repo/logger';
 
 // ----------------------------------------------------------------------------
 
@@ -15,12 +15,14 @@ import { getTraceId } from '@repo/logger';
 @Injectable()
 export class UserGrpcService implements OnModuleInit {
   private svc!: User.UserServiceClient;
-  private readonly logger = new Logger(UserGrpcService.name);
 
   constructor(
     @Inject(GRPC_SERVICE.USER) private readonly client: ClientGrpc,
     private readonly grpcCaller: GrpcCaller,
-  ) {}
+    private readonly logger: AppLogger,
+  ) {
+    this.logger.setContext(UserGrpcService.name);
+  }
 
   onModuleInit() {
     this.svc = this.client.getService<User.UserServiceClient>('UserService');
@@ -30,12 +32,7 @@ export class UserGrpcService implements OnModuleInit {
    * 모든 사용자 조회
    */
   async findAll(request: User.FindAllRequest): Promise<User.UserListResponse> {
-    this.logger.log(
-      'findAll() called',
-      { context: UserGrpcService.name },
-      request,
-      'UserGrpcService.name',
-    );
+    this.logger.info('findAll() called', { request });
 
     // TODO : helper 함수 필요
     const metadata = new Metadata();
@@ -48,6 +45,8 @@ export class UserGrpcService implements OnModuleInit {
    * 사용자 ID로 조회
    */
   async findOne(id: string): Promise<User.UserResponse> {
+    this.logger.info('findOne() called', { id });
+
     return this.grpcCaller.call(() => this.svc.findOne({ id }, new Metadata()));
   }
 

@@ -1,5 +1,3 @@
-import { type ErrorCode } from './error-codes';
-
 export const GRPC_STATUS = {
   OK: 0,
   CANCELLED: 1,
