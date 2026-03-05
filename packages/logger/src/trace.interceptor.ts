@@ -3,6 +3,7 @@ import { finalize, Observable } from 'rxjs';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 import { requestContext, generateTraceId } from './trace.context';
+import { AppLogger } from './app-logger.service';
 
 /**
  * 모든 요청에 고유한 traceId를 할당하는 Interceptor
@@ -23,8 +24,10 @@ import { requestContext, generateTraceId } from './trace.context';
 export class TraceInterceptor implements NestInterceptor {
   constructor(
     @Inject(WINSTON_MODULE_NEST_PROVIDER)
-    private readonly logger: LoggerService,
-  ) {}
+    private readonly logger: AppLogger,
+  ) {
+    this.logger.setContext(TraceInterceptor.name);
+  }
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const contextType = context.getType();
@@ -67,32 +70,29 @@ export class TraceInterceptor implements NestInterceptor {
                 }>();
                 const response = context.switchToHttp().getResponse<{ statusCode?: number }>();
 
-                this.logger.log('request completed', {
-                  context: TraceInterceptor.name,
+                this.logger.info('request completed', {
                   transport: 'http',
                   method: request?.method,
                   path: request?.originalUrl ?? request?.url,
                   statusCode: response?.statusCode,
-                  latencyMs,
+                  latency: `${latencyMs}ms`,
                 });
                 return;
               }
 
               if (contextType === 'rpc') {
                 const rpc = context.getHandler();
-                this.logger.log('request completed', {
-                  context: TraceInterceptor.name,
+                this.logger.info('request completed', {
                   transport: 'rpc',
                   handler: rpc?.name,
-                  latencyMs,
+                  latency: `${latencyMs}ms`,
                 });
                 return;
               }
 
-              this.logger.log('request completed', {
-                context: TraceInterceptor.name,
+              this.logger.info('request completed', {
                 transport: String(contextType),
-                latencyMs,
+                latency: `${latencyMs}ms`,
               });
             }),
           )

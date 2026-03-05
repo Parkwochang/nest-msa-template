@@ -5,6 +5,7 @@ import { registerAs } from '@nestjs/config';
 // prettier-ignore
 
 export const AppConfigSchema = z.object({
+  NODE_ENV      : z.enum(['local', 'development', 'production']),
   DATABASE_URL  : z.string(),
   GRPC_URL      : z.string(),
   HTTP_PORT     : z.string().transform(Number),
@@ -26,6 +27,7 @@ export const GatewayConfigSchema = z.object({
 
 export const APP_CONFIG = registerAs('app', () => {
   return AppConfigSchema.parse({
+    NODE_ENV      : process.env.NODE_ENV,
     DATABASE_URL  : process.env.DATABASE_URL,
     GRPC_URL      : process.env.GRPC_URL,
     HTTP_PORT     : process.env.HTTP_PORT,
