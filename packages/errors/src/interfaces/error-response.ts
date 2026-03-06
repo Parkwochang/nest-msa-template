@@ -1,4 +1,4 @@
-import type { ErrorCode } from '../constants';
+import type { ErrorCode } from '@repo/core';
 
 export interface ErrorEnvelope {
   code: ErrorCode;

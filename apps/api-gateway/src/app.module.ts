@@ -1,8 +1,11 @@
 import { Module } from '@nestjs/common';
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { DevtoolsModule } from '@nestjs/devtools-integration';
+import { ZodValidationPipe } from 'nestjs-zod';
 // pcakcage
 import { LoggerModule, TraceInterceptor } from '@repo/logger';
+import { GrpcModule } from '@repo/transport/grpc';
+import { GlobalHttpExceptionFilter } from '@repo/errors';
 import {
   AppConfigModule,
   COMMON_CONFIG,
@@ -14,7 +17,6 @@ import { AppController } from '@/app.controller';
 import { AppService } from '@/app.service';
 import { UserModule } from '@/modules/user/user.module';
 import { GatewayHealthModule } from './common/health/health.module';
-import { GrpcModule } from '@repo/transport/grpc';
 
 // ----------------------------------------------------------------------------
 
@@ -54,6 +56,14 @@ import { GrpcModule } from '@repo/transport/grpc';
   controllers: [AppController],
   providers: [
     AppService,
+    {
+      provide: APP_FILTER,
+      useClass: GlobalHttpExceptionFilter,
+    },
+    {
+      provide: APP_PIPE,
+      useClass: ZodValidationPipe,
+    },
     {
       provide: APP_INTERCEPTOR,
       useClass: TraceInterceptor,

@@ -10,6 +10,7 @@ import { GlobalGrpcExceptionFilter } from '@repo/errors';
 
 import { AppController } from './app.controller';
 import { UserModule } from './domains/user';
+import { AppZodValidationPipe } from './common/pipe/dto.filter';
 
 // ----------------------------------------------------------------------------
 
@@ -31,7 +32,6 @@ import { UserModule } from './domains/user';
     // Feature Modules
     UserModule,
   ],
-  // controllers: [AppController],
   providers: [
     {
       provide: APP_FILTER,
@@ -39,7 +39,7 @@ import { UserModule } from './domains/user';
     },
     {
       provide: APP_PIPE,
-      useClass: ZodValidationPipe,
+      useClass: AppZodValidationPipe,
     },
     {
       provide: APP_INTERCEPTOR,

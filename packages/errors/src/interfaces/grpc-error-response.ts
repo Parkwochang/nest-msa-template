@@ -1,4 +1,4 @@
-import type { GrpcStatusCode } from '../constants';
+import type { GrpcStatusCode } from '@repo/core';
 
 export interface GrpcErrorResponse {
   code: GrpcStatusCode;

@@ -1,7 +1,8 @@
 import { ConflictException, Inject, Injectable } from '@nestjs/common';
 
 import { AppLogger } from '@repo/logger';
-import { AppRpcException, GRPC_STATUS } from '@repo/errors';
+import { AppRpcException } from '@repo/errors';
+import { GRPC_STATUS } from '@repo/core';
 
 import {
   CreateUserCommand,

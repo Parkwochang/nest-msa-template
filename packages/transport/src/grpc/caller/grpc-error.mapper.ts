@@ -34,6 +34,12 @@ export function mapGrpcError(err: unknown) {
     const message = err.details || err.message || 'gRPC call failed';
 
     switch (err.code) {
+      case GRPC_STATUS.CANCELLED:
+        return new RequestTimeoutException('gRPC call cancelled');
+
+      case GRPC_STATUS.UNKNOWN:
+        return new BadRequestException(message);
+
       case GRPC_STATUS.INVALID_ARGUMENT:
         return new BadRequestException(message);
 

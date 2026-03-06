@@ -1,7 +1,7 @@
 import { Catch, type ExceptionFilter, HttpException, HttpStatus } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 
-import { ERROR_CODE, GRPC_STATUS, type ErrorCode, type GrpcStatusCode } from '../constants';
+import { ERROR_CODE, GRPC_STATUS, type ErrorCode, type GrpcStatusCode } from '@repo/core';
 
 interface GrpcErrorResponse {
   code: GrpcStatusCode;
@@ -128,40 +128,75 @@ function normalizeMessageAndDetails(
 }
 
 function httpStatusToGrpcStatus(status: HttpStatus): GrpcStatusCode {
-  if (status >= 500) return GRPC_STATUS.INTERNAL;
-  if (status === HttpStatus.BAD_REQUEST) return GRPC_STATUS.INVALID_ARGUMENT;
-  if (status === HttpStatus.UNAUTHORIZED) return GRPC_STATUS.UNAUTHENTICATED;
-  if (status === HttpStatus.FORBIDDEN) return GRPC_STATUS.PERMISSION_DENIED;
-  if (status === HttpStatus.NOT_FOUND) return GRPC_STATUS.NOT_FOUND;
-  if (status === HttpStatus.CONFLICT) return GRPC_STATUS.ALREADY_EXISTS;
-  if (status === HttpStatus.REQUEST_TIMEOUT) return GRPC_STATUS.DEADLINE_EXCEEDED;
-  if (status === HttpStatus.SERVICE_UNAVAILABLE) return GRPC_STATUS.UNAVAILABLE;
-  return GRPC_STATUS.UNKNOWN;
+  if (status >= 500) {
+    return GRPC_STATUS.INTERNAL;
+  }
+
+  switch (status) {
+    case HttpStatus.BAD_REQUEST:
+      return GRPC_STATUS.INVALID_ARGUMENT;
+    case HttpStatus.UNAUTHORIZED:
+      return GRPC_STATUS.UNAUTHENTICATED;
+    case HttpStatus.FORBIDDEN:
+      return GRPC_STATUS.PERMISSION_DENIED;
+    case HttpStatus.NOT_FOUND:
+      return GRPC_STATUS.NOT_FOUND;
+    case HttpStatus.CONFLICT:
+      return GRPC_STATUS.ALREADY_EXISTS;
+    case HttpStatus.REQUEST_TIMEOUT:
+      return GRPC_STATUS.DEADLINE_EXCEEDED;
+    case HttpStatus.SERVICE_UNAVAILABLE:
+      return GRPC_STATUS.UNAVAILABLE;
+    default:
+      return GRPC_STATUS.UNKNOWN;
+  }
 }
 
 function httpStatusToErrorCode(status: HttpStatus): ErrorCode {
-  if (status >= 500) return ERROR_CODE.INTERNAL_ERROR;
-  if (status === HttpStatus.BAD_REQUEST) return ERROR_CODE.BAD_REQUEST;
-  if (status === HttpStatus.UNAUTHORIZED) return ERROR_CODE.UNAUTHORIZED;
-  if (status === HttpStatus.FORBIDDEN) return ERROR_CODE.FORBIDDEN;
-  if (status === HttpStatus.NOT_FOUND) return ERROR_CODE.NOT_FOUND;
-  if (status === HttpStatus.CONFLICT) return ERROR_CODE.CONFLICT;
-  if (status === HttpStatus.REQUEST_TIMEOUT) return ERROR_CODE.TIMEOUT;
-  if (status === HttpStatus.SERVICE_UNAVAILABLE) return ERROR_CODE.SERVICE_UNAVAILABLE;
-  return ERROR_CODE.VALIDATION_ERROR;
+  if (status >= 500) {
+    return ERROR_CODE.INTERNAL_ERROR;
+  }
+
+  switch (status) {
+    case HttpStatus.BAD_REQUEST:
+      return ERROR_CODE.BAD_REQUEST;
+    case HttpStatus.UNAUTHORIZED:
+      return ERROR_CODE.UNAUTHORIZED;
+    case HttpStatus.FORBIDDEN:
+      return ERROR_CODE.FORBIDDEN;
+    case HttpStatus.NOT_FOUND:
+      return ERROR_CODE.NOT_FOUND;
+    case HttpStatus.CONFLICT:
+      return ERROR_CODE.CONFLICT;
+    case HttpStatus.REQUEST_TIMEOUT:
+      return ERROR_CODE.TIMEOUT;
+    case HttpStatus.SERVICE_UNAVAILABLE:
+      return ERROR_CODE.SERVICE_UNAVAILABLE;
+    default:
+      return ERROR_CODE.VALIDATION_ERROR;
+  }
 }
 
 function errorCodeToGrpcStatus(errorCode: ErrorCode): GrpcStatusCode {
-  if (errorCode === ERROR_CODE.BAD_REQUEST || errorCode === ERROR_CODE.VALIDATION_ERROR) {
-    return GRPC_STATUS.INVALID_ARGUMENT;
+  switch (errorCode) {
+    case ERROR_CODE.BAD_REQUEST:
+    case ERROR_CODE.VALIDATION_ERROR:
+      return GRPC_STATUS.INVALID_ARGUMENT;
+    case ERROR_CODE.UNAUTHORIZED:
+      return GRPC_STATUS.UNAUTHENTICATED;
+    case ERROR_CODE.FORBIDDEN:
+      return GRPC_STATUS.PERMISSION_DENIED;
+    case ERROR_CODE.NOT_FOUND:
+      return GRPC_STATUS.NOT_FOUND;
+    case ERROR_CODE.CONFLICT:
+      return GRPC_STATUS.ALREADY_EXISTS;
+    case ERROR_CODE.TIMEOUT:
+      return GRPC_STATUS.DEADLINE_EXCEEDED;
+    case ERROR_CODE.SERVICE_UNAVAILABLE:
+      return GRPC_STATUS.UNAVAILABLE;
+    default:
+      return GRPC_STATUS.INTERNAL;
   }
-  if (errorCode === ERROR_CODE.UNAUTHORIZED) return GRPC_STATUS.UNAUTHENTICATED;
-  if (errorCode === ERROR_CODE.FORBIDDEN) return GRPC_STATUS.PERMISSION_DENIED;
-  if (errorCode === ERROR_CODE.NOT_FOUND) return GRPC_STATUS.NOT_FOUND;
-  if (errorCode === ERROR_CODE.CONFLICT) return GRPC_STATUS.ALREADY_EXISTS;
-  if (errorCode === ERROR_CODE.TIMEOUT) return GRPC_STATUS.DEADLINE_EXCEEDED;
-  if (errorCode === ERROR_CODE.SERVICE_UNAVAILABLE) return GRPC_STATUS.UNAVAILABLE;
-  return GRPC_STATUS.INTERNAL;
 }
 
 function toGrpcStatusCode(value: number): GrpcStatusCode {

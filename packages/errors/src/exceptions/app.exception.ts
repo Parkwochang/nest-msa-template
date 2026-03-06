@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
 
-import { ERROR_CODE, type ErrorCode } from '../constants';
+import { ERROR_CODE, type ErrorCode } from '@repo/core';
+
 import type { ErrorEnvelope } from '../interfaces';
 
 export interface AppExceptionOptions {

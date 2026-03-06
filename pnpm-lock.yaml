@@ -418,6 +418,9 @@ importers:
       '@repo/config':
         specifier: workspace:*
         version: link:../../packages/config
+      '@repo/core':
+        specifier: workspace:*
+        version: link:../../packages/core
       '@repo/errors':
         specifier: workspace:*
         version: link:../../packages/errors

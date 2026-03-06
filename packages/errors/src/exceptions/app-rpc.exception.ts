@@ -1,6 +1,7 @@
 import { RpcException } from '@nestjs/microservices';
 
-import { type GrpcErrorResponse, GRPC_STATUS, type GrpcStatusCode } from '../constants';
+import { GRPC_STATUS, type GrpcStatusCode } from '@repo/core';
+import type { GrpcErrorResponse } from '@/interfaces';
 
 export interface AppRpcExceptionOptions {
   code?: GrpcStatusCode;

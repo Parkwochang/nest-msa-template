@@ -97,6 +97,7 @@ export class GrpcCaller {
       return result;
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'grpc call failed';
+
       this.logger.error(message, {
         traceId,
         attempts,

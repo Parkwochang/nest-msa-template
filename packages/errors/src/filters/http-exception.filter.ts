@@ -1,9 +1,4 @@
-import {
-  ArgumentsHost,
-  Catch,
-  type ExceptionFilter,
-  HttpStatus,
-} from '@nestjs/common';
+import { ArgumentsHost, Catch, type ExceptionFilter, HttpStatus } from '@nestjs/common';
 
 import { mapUnknownToHttpError, toErrorResponse } from '../mappers';
 

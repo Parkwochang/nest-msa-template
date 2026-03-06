@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
 
-import { ERROR_CODE, type ErrorCode } from '../constants';
+import { ERROR_CODE, type ErrorCode } from '@repo/core';
 import type { ErrorResponse } from '../interfaces';
 
 interface MapperOptions {

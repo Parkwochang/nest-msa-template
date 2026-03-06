@@ -3,7 +3,8 @@ import { GrpcMethod } from '@nestjs/microservices';
 
 import { User } from '@repo/proto';
 import { AppLogger } from '@repo/logger';
-import { AppRpcException, GRPC_STATUS } from '@repo/errors';
+import { AppRpcException } from '@repo/errors';
+import { GRPC_STATUS } from '@repo/core';
 
 import {
   CreateUserCommand,
