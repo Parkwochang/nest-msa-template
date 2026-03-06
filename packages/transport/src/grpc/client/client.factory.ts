@@ -1,8 +1,8 @@
 import { ClientGrpcProxy, ClientProxyFactory, type GrpcOptions, Transport } from '@nestjs/microservices';
+import { FactoryProvider } from '@nestjs/common';
 
 import { DEFAULT_CHANNEL_OPTIONS, DEFAULT_LOADER_OPTIONS } from '../constants';
 import { GrpcClientAsyncConfig, type GrpcFactoryOptions } from '../types';
-import { FactoryProvider } from '@nestjs/common';
 
 // ----------------------------------------------------------------------------
 

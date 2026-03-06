@@ -25,7 +25,7 @@ export interface WinstonConfigOptions {
 }
 
 export const createWinstonConfig = (options: WinstonConfigOptions): LoggerOptions => {
-  const { serviceName, level = process.env.LOG_LEVEL || 'info', nodeEnv = process.env.NODE_ENV, fileLog } = options;
+  const { serviceName, level, nodeEnv = process.env.NODE_ENV, fileLog } = options;
 
   const isDevelopment = nodeEnv !== 'production';
   const isFileLogEnabled = fileLog?.enabled ?? false;

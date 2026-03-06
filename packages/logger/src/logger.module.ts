@@ -50,7 +50,7 @@ export class LoggerModule {
           inject: ['ConfigService'],
           useFactory: (configService: { get: (key: string) => string | undefined }) => {
             const nodeEnv = configService.get('NODE_ENV');
-            const logLevel = configService.get('LOG_LEVEL');
+            const logLevel = configService.get('LOG_LEVEL') || 'info';
 
             return createWinstonConfig({
               ...options,

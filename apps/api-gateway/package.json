@@ -31,6 +31,7 @@
     "@repo/errors": "workspace:*",
     "@repo/logger": "workspace:*",
     "@repo/proto": "workspace:*",
+    "@repo/transport": "workspace:*",
     "nestjs-zod": "catalog:validation",
     "reflect-metadata": "catalog:nestjs",
     "rxjs": "catalog:",

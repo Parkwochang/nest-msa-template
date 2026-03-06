@@ -9,12 +9,12 @@ import {
   type CommonConfigType,
 } from '@repo/config/env';
 import { AuthModule } from '@repo/config/auth';
-import { HealthModule } from '@repo/config/health';
 
 import { AppController } from '@/app.controller';
 import { AppService } from '@/app.service';
 import { UserModule } from '@/modules/user/user.module';
 import { GatewayHealthModule } from './common/health/health.module';
+import { GrpcModule } from '@repo/transport/grpc';
 
 // ----------------------------------------------------------------------------
 
@@ -25,6 +25,7 @@ import { GatewayHealthModule } from './common/health/health.module';
     }),
 
     LoggerModule.forRoot({
+      level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
       serviceName: 'API_GATEWAY',
       fileLog: {
         enabled: process.env.NODE_ENV !== 'production',
@@ -44,8 +45,10 @@ import { GatewayHealthModule } from './common/health/health.module';
       }),
     }),
 
-    // Feature Modules
+    GrpcModule,
     GatewayHealthModule,
+
+    // Feature Modules
     UserModule,
   ],
   controllers: [AppController],

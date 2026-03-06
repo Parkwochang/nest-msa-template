@@ -17,6 +17,19 @@
       "default": "./dist/kafka/index.js"
     }
   },
+  "typesVersions": {
+    "*": {
+      "grpc": [
+        "./dist/grpc/index.d.ts"
+      ],
+      "redis": [
+        "./dist/redis/index.d.ts"
+      ],
+      "kafka": [
+        "./dist/kafka/index.d.ts"
+      ]
+    }
+  },
   "scripts": {
     "build": "tsc --build",
     "dev": "tsc --build --watch",

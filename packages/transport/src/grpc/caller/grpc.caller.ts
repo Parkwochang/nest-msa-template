@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import CircuitBreaker from 'opossum';
+import * as CircuitBreaker from 'opossum';
 import { catchError, lastValueFrom, Observable, retry, timeout, timer } from 'rxjs';
 
 import { AppLogger, getTraceId } from '@repo/logger';
@@ -59,7 +59,7 @@ export class GrpcCaller {
                 attempts = count + 1;
 
                 if (!isRetryableGrpcError(err)) {
-                  this.logger.debug('grpc retry skipped: non-retryable error', {
+                  this.logger.error('grpc retry skipped: non-retryable error', {
                     traceId,
                     attempt: attempts,
                     code: isGrpcLikeError(err) ? err.code : undefined,
