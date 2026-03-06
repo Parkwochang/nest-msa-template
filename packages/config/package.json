@@ -43,6 +43,7 @@
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
+    "@repo/core": "workspace:*",
     "opossum": "catalog:circuit-breaker",
     "@nestjs/terminus": "catalog:nestjs"
   },

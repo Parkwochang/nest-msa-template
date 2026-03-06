@@ -1,0 +1,10 @@
+{
+  "extends": "@repo/typescript-config/nestjs",
+  "compilerOptions": {
+    "composite": true,
+    "rootDir": "./src",
+    "outDir": "./dist"
+  },
+  "include": ["src/**/*"],
+  "exclude": ["dist", "build", "node_modules"]
+}

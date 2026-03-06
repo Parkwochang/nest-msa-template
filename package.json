@@ -17,10 +17,12 @@
     "user": "pnpm -F user-service",
     "auth": "pnpm -F auth-service",
     "common": "pnpm -F @repo/common",
+    "core": "pnpm -F @repo/core",
     "config": "pnpm -F @repo/config",
     "logger": "pnpm -F @repo/logger",
     "proto": "pnpm -F @repo/proto",
-    "errors": "pnpm -F @repo/errors"
+    "errors": "pnpm -F @repo/errors",
+    "transport": "pnpm -F @repo/transport"
   },
   "devDependencies": {
     "prettier": "catalog:",

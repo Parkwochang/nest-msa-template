@@ -1,13 +1,2 @@
-export const ERROR_CODE = {
-  INTERNAL_ERROR: 'INTERNAL_ERROR',
-  VALIDATION_ERROR: 'VALIDATION_ERROR',
-  BAD_REQUEST: 'BAD_REQUEST',
-  UNAUTHORIZED: 'UNAUTHORIZED',
-  FORBIDDEN: 'FORBIDDEN',
-  NOT_FOUND: 'NOT_FOUND',
-  CONFLICT: 'CONFLICT',
-  TIMEOUT: 'TIMEOUT',
-  SERVICE_UNAVAILABLE: 'SERVICE_UNAVAILABLE',
-} as const;
-
-export type ErrorCode = (typeof ERROR_CODE)[keyof typeof ERROR_CODE];
+export { ERROR_CODE } from '@repo/core';
+export type { ErrorCode } from '@repo/core';

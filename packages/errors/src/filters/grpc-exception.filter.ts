@@ -1,29 +1,7 @@
 import { Catch, type ExceptionFilter, HttpException, HttpStatus } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 
-import { ERROR_CODE, type ErrorCode } from '../constants';
-
-const GRPC_STATUS = {
-  OK: 0,
-  CANCELLED: 1,
-  UNKNOWN: 2,
-  INVALID_ARGUMENT: 3,
-  DEADLINE_EXCEEDED: 4,
-  NOT_FOUND: 5,
-  ALREADY_EXISTS: 6,
-  PERMISSION_DENIED: 7,
-  RESOURCE_EXHAUSTED: 8,
-  FAILED_PRECONDITION: 9,
-  ABORTED: 10,
-  OUT_OF_RANGE: 11,
-  UNIMPLEMENTED: 12,
-  INTERNAL: 13,
-  UNAVAILABLE: 14,
-  DATA_LOSS: 15,
-  UNAUTHENTICATED: 16,
-} as const;
-
-type GrpcStatusCode = (typeof GRPC_STATUS)[keyof typeof GRPC_STATUS];
+import { ERROR_CODE, GRPC_STATUS, type ErrorCode, type GrpcStatusCode } from '../constants';
 
 interface GrpcErrorResponse {
   code: GrpcStatusCode;
@@ -35,9 +13,6 @@ interface GrpcErrorResponse {
 @Catch()
 export class GlobalGrpcExceptionFilter implements ExceptionFilter<unknown> {
   catch(exception: unknown): never {
-    const mapped = mapUnknownToGrpcError(exception);
-
-    console.log('exception', mapped.code, mapped.message, mapped.details, mapped.errorCode, mapped);
     throw new RpcException(mapUnknownToGrpcError(exception));
   }
 }

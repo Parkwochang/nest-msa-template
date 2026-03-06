@@ -1,0 +1,51 @@
+{
+  "name": "@repo/transport",
+  "version": "0.0.0",
+  "private": true,
+  "description": "transport module",
+  "exports": {
+    "./grpc": {
+      "types": "./dist/grpc/index.d.ts",
+      "default": "./dist/grpc/index.js"
+    },
+    "./redis": {
+      "types": "./dist/redis/index.d.ts",
+      "default": "./dist/redis/index.js"
+    },
+    "./kafka": {
+      "types": "./dist/kafka/index.d.ts",
+      "default": "./dist/kafka/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "dev": "tsc --build --watch",
+    "clean": "rm -rf dist",
+    "check-types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@repo/core": "workspace:*",
+    "@repo/logger": "workspace:*",
+    "@grpc/grpc-js": "catalog:grpc",
+    "@nestjs/common": "catalog:nestjs",
+    "@nestjs/core": "catalog:nestjs",
+    "@nestjs/microservices": "catalog:nestjs",
+    "ioredis": "catalog:redis",
+    "opossum": "catalog:circuit-breaker",
+    "rxjs": "catalog:",
+    "zod": "catalog:validation"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "@types/node": "^22.10.7",
+    "@nestjs/config": "catalog:nestjs",
+    "typescript": "catalog:",
+    "@types/opossum": "catalog:circuit-breaker"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "catalog:nestjs",
+    "@nestjs/core": "catalog:nestjs",
+    "@nestjs/microservices": "catalog:nestjs",
+    "rxjs": "catalog:"
+  }
+}
