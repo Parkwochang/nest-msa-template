@@ -29,7 +29,7 @@ export class GrpcCaller {
 
     const retryDelayMs = options?.retryDelayMs ?? GRPC_CALLER_DEFAULTS.retryDelayMs;
 
-    const attemptTimeoutMs = options?.attemptTimeoutMs ?? options?.timeout ?? GRPC_CALLER_DEFAULTS.attemptTimeoutMs;
+    const attemptTimeoutMs = options?.attemptTimeoutMs ?? GRPC_CALLER_DEFAULTS.attemptTimeoutMs;
 
     const totalTimeoutMs = resolveTotalTimeoutMs({
       requestedTotalTimeoutMs: options?.totalTimeoutMs,
@@ -56,6 +56,8 @@ export class GrpcCaller {
             retry({
               count: retryCount,
               delay: (err, count) => {
+                const delayMs = retryDelayMs * count;
+
                 attempts = count + 1;
 
                 if (!isRetryableGrpcError(err)) {
@@ -65,10 +67,10 @@ export class GrpcCaller {
                     code: isGrpcLikeError(err) ? err.code : undefined,
                     message: err instanceof Error ? err.message : 'non-retryable error',
                   });
+
                   throw err;
                 }
 
-                const delayMs = retryDelayMs * count;
                 this.logger.warn('grpc retry scheduled', {
                   traceId,
                   attempt: attempts,
@@ -81,6 +83,7 @@ export class GrpcCaller {
             }),
             // total timeout : per-attempt + retry + delay
             timeout(totalTimeoutMs),
+
             catchError((err) => {
               throw mapGrpcError(err);
             }),
