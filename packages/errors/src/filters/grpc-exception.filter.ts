@@ -89,14 +89,13 @@ function normalizeRpcErrorPayload(error: unknown): GrpcErrorResponse {
   }
 
   if (isObject(error)) {
-    const grpcCode = typeof error.code === 'number' ? toGrpcStatusCode(error.code) : undefined;
-    const domainCode = isErrorCode(error.code) ? error.code : undefined;
+    const grpcCode = toGrpcStatusCode(error.code); // 정의된 에러가 아닐 시 UNKNOWN 반환
 
     return {
-      code: grpcCode ?? (domainCode ? errorCodeToGrpcStatus(domainCode) : GRPC_STATUS.UNKNOWN),
+      code: grpcCode,
+      errorCode: grpcStatusCodeToErrorCode(grpcCode),
       message: normalizeMessage(error.message),
       details: error.details,
-      errorCode: domainCode ?? ERROR_CODE.INTERNAL_ERROR,
     };
   }
 
@@ -144,6 +143,7 @@ function normalizeMessageAndDetails(
   };
 }
 
+/** http status 를 GrpcStatusCode 로 변환 */
 function httpStatusToGrpcStatus(status: HttpStatus): GrpcStatusCode {
   if (status >= 500) {
     return GRPC_STATUS.INTERNAL;
@@ -169,6 +169,7 @@ function httpStatusToGrpcStatus(status: HttpStatus): GrpcStatusCode {
   }
 }
 
+/** http status 를 http error code 로 변환 */
 function httpStatusToErrorCode(status: HttpStatus): ErrorCode {
   if (status >= 500) {
     return ERROR_CODE.INTERNAL_ERROR;
@@ -194,6 +195,7 @@ function httpStatusToErrorCode(status: HttpStatus): ErrorCode {
   }
 }
 
+/** Http error code 를 GrpcStatusCode 로 변환 */
 function errorCodeToGrpcStatus(errorCode: ErrorCode): GrpcStatusCode {
   switch (errorCode) {
     case ERROR_CODE.BAD_REQUEST:
@@ -216,10 +218,36 @@ function errorCodeToGrpcStatus(errorCode: ErrorCode): GrpcStatusCode {
   }
 }
 
-function toGrpcStatusCode(value: number): GrpcStatusCode {
+function grpcStatusCodeToErrorCode(code: GrpcStatusCode): ErrorCode {
+  switch (code) {
+    case GRPC_STATUS.CANCELLED:
+    case GRPC_STATUS.DEADLINE_EXCEEDED:
+      return ERROR_CODE.TIMEOUT;
+    case GRPC_STATUS.INVALID_ARGUMENT:
+      return ERROR_CODE.BAD_REQUEST;
+    case GRPC_STATUS.UNAUTHENTICATED:
+      return ERROR_CODE.UNAUTHORIZED;
+    case GRPC_STATUS.PERMISSION_DENIED:
+      return ERROR_CODE.FORBIDDEN;
+    case GRPC_STATUS.NOT_FOUND:
+      return ERROR_CODE.NOT_FOUND;
+    case GRPC_STATUS.ALREADY_EXISTS:
+      return ERROR_CODE.CONFLICT;
+    case GRPC_STATUS.UNAVAILABLE:
+      return ERROR_CODE.SERVICE_UNAVAILABLE;
+    default:
+      return ERROR_CODE.INTERNAL_ERROR;
+  }
+}
+
+/** error code 를 GrpcStatusCode 로 변환 */
+function toGrpcStatusCode(value: unknown): GrpcStatusCode {
+  if (typeof value !== 'number') return GRPC_STATUS.UNKNOWN;
+
   return Object.values(GRPC_STATUS).includes(value as GrpcStatusCode) ? (value as GrpcStatusCode) : GRPC_STATUS.UNKNOWN;
 }
 
+/** error code 가 ErrorCode 인지 확인 */
 function isErrorCode(value: unknown): value is ErrorCode {
   return typeof value === 'string' && Object.values(ERROR_CODE).includes(value as ErrorCode);
 }
@@ -228,6 +256,7 @@ function isObject(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null;
 }
 
+/** 에러 스택 추출 */
 function extractStack(exception: unknown): string | undefined {
   if (exception instanceof Error) {
     return exception.stack;
