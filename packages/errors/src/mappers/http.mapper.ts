@@ -15,6 +15,7 @@ interface HttpErrorResult {
   details?: unknown;
 }
 
+/** 에러를 HttpErrorResult 로 변환 */
 export function mapUnknownToHttpError(error: unknown): HttpErrorResult {
   if (error instanceof HttpException) {
     const response = error.getResponse();
@@ -62,6 +63,7 @@ export function mapUnknownToHttpError(error: unknown): HttpErrorResult {
   };
 }
 
+/** 에러를 ErrorResponse 로 변환 */
 export function toErrorResponse(error: unknown, options?: MapperOptions): ErrorResponse {
   const mapped = mapUnknownToHttpError(error);
 

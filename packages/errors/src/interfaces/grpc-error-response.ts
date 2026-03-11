@@ -1,7 +1,9 @@
-import type { GrpcStatusCode } from '@repo/core';
+import type { ErrorCode, GrpcStatusCode } from '@repo/core';
 
 export interface GrpcErrorResponse {
   code: GrpcStatusCode;
   message: string;
-  metadata: any;
+  details?: unknown;
+  metadata?: unknown;
+  errorCode: ErrorCode;
 }
