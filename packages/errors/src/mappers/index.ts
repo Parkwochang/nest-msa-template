@@ -1,1 +1,2 @@
-export * from './error.mapper';
+export * from './http.mapper';
+export * from './grpc.mapper';

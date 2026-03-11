@@ -1,12 +1,13 @@
 import { RpcException } from '@nestjs/microservices';
 
-import { GRPC_STATUS, type GrpcStatusCode } from '@repo/core';
-import type { GrpcErrorResponse } from '@/interfaces';
+import { type GrpcErrorResponse } from '@/interfaces';
+import { ErrorCode, GRPC_STATUS, type GrpcStatusCode } from '@repo/core';
 
 export interface AppRpcExceptionOptions {
   code?: GrpcStatusCode;
   message?: string;
   metadata?: any;
+  errorCode?: ErrorCode;
 }
 
 export class AppRpcException extends RpcException {
@@ -17,7 +18,7 @@ export class AppRpcException extends RpcException {
     const payload: GrpcErrorResponse = {
       code: options.code ?? GRPC_STATUS.INTERNAL,
       message: options.message ?? 'Internal server error',
-      metadata: options.metadata,
+      errorCode: options.errorCode,
     };
     super(payload);
 
