@@ -1,22 +1,14 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
 
-import { ERROR_CODE, type ErrorCode } from '@repo/core';
-import type { ErrorResponse } from '../interfaces';
+import { ERROR_CODE } from '@repo/core';
 
-interface MapperOptions {
-  path?: string;
-  traceId?: string;
-}
+import type { ErrorResponse, HttpErrorResponse, HttpMapperOptions } from '../interfaces';
+import { httpStatusToErrorCode, isErrorCode, isObject, normalizeMessageAndDetails } from './utils.mapper';
 
-interface HttpErrorResult {
-  status: HttpStatus;
-  code: ErrorCode;
-  message: string;
-  details?: unknown;
-}
+// ----------------------------------------------------------------------------
 
 /** 에러를 HttpErrorResult 로 변환 */
-export function mapUnknownToHttpError(error: unknown): HttpErrorResult {
+export function mapUnknownToHttpError(error: unknown): HttpErrorResponse {
   if (error instanceof HttpException) {
     const response = error.getResponse();
     const status = error.getStatus();
@@ -24,7 +16,7 @@ export function mapUnknownToHttpError(error: unknown): HttpErrorResult {
     if (typeof response === 'string') {
       return {
         status,
-        code: statusToErrorCode(status),
+        code: httpStatusToErrorCode(status),
         message: response,
       };
     }
@@ -34,7 +26,7 @@ export function mapUnknownToHttpError(error: unknown): HttpErrorResult {
 
       return {
         status,
-        code: isErrorCode(response.code) ? response.code : statusToErrorCode(status),
+        code: isErrorCode(response.code) ? response.code : httpStatusToErrorCode(status),
         message: normalized.message,
         details: normalized.details,
       };
@@ -42,7 +34,7 @@ export function mapUnknownToHttpError(error: unknown): HttpErrorResult {
 
     return {
       status,
-      code: statusToErrorCode(status),
+      code: httpStatusToErrorCode(status),
       message: 'Unexpected error',
     };
   }
@@ -64,7 +56,7 @@ export function mapUnknownToHttpError(error: unknown): HttpErrorResult {
 }
 
 /** 에러를 ErrorResponse 로 변환 */
-export function toErrorResponse(error: unknown, options?: MapperOptions): ErrorResponse {
+export function toErrorResponse(error: unknown, options?: HttpMapperOptions): ErrorResponse {
   const mapped = mapUnknownToHttpError(error);
 
   return {
@@ -77,55 +69,5 @@ export function toErrorResponse(error: unknown, options?: MapperOptions): ErrorR
       message: mapped.message,
       details: mapped.details,
     },
-  };
-}
-
-function statusToErrorCode(status: HttpStatus): ErrorCode {
-  if (status >= 500) return ERROR_CODE.INTERNAL_ERROR;
-  if (status === HttpStatus.BAD_REQUEST) return ERROR_CODE.BAD_REQUEST;
-  if (status === HttpStatus.UNAUTHORIZED) return ERROR_CODE.UNAUTHORIZED;
-  if (status === HttpStatus.FORBIDDEN) return ERROR_CODE.FORBIDDEN;
-  if (status === HttpStatus.NOT_FOUND) return ERROR_CODE.NOT_FOUND;
-  if (status === HttpStatus.CONFLICT) return ERROR_CODE.CONFLICT;
-  if (status === HttpStatus.REQUEST_TIMEOUT) return ERROR_CODE.TIMEOUT;
-  return ERROR_CODE.VALIDATION_ERROR;
-}
-
-function isErrorCode(value: unknown): value is ErrorCode {
-  return typeof value === 'string' && Object.values(ERROR_CODE).includes(value as ErrorCode);
-}
-
-function isObject(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null;
-}
-
-function normalizeMessageAndDetails(
-  response: Record<string, unknown>,
-  status: HttpStatus,
-): { message: string; details?: unknown } {
-  const message = response.message;
-
-  if (typeof message === 'string') {
-    return {
-      message,
-      details: response.details,
-    };
-  }
-
-  if (Array.isArray(message)) {
-    const isValidationError = status === HttpStatus.BAD_REQUEST;
-
-    return {
-      message: isValidationError ? 'Validation failed' : 'Request failed',
-      details: {
-        ...(isObject(response.details) ? response.details : {}),
-        messages: message,
-      },
-    };
-  }
-
-  return {
-    message: 'Unexpected error',
-    details: response.details,
   };
 }

@@ -42,18 +42,25 @@ export function httpStatusToGrpcStatus(status: HttpStatus): GrpcStatusCode {
   switch (status) {
     case HttpStatus.BAD_REQUEST:
       return GRPC_STATUS.INVALID_ARGUMENT;
+
     case HttpStatus.UNAUTHORIZED:
       return GRPC_STATUS.UNAUTHENTICATED;
+
     case HttpStatus.FORBIDDEN:
       return GRPC_STATUS.PERMISSION_DENIED;
+
     case HttpStatus.NOT_FOUND:
       return GRPC_STATUS.NOT_FOUND;
+
     case HttpStatus.CONFLICT:
       return GRPC_STATUS.ALREADY_EXISTS;
+
     case HttpStatus.REQUEST_TIMEOUT:
       return GRPC_STATUS.DEADLINE_EXCEEDED;
+
     case HttpStatus.SERVICE_UNAVAILABLE:
       return GRPC_STATUS.UNAVAILABLE;
+
     default:
       return GRPC_STATUS.UNKNOWN;
   }
@@ -65,18 +72,25 @@ export function grpcStatusCodeToErrorCode(code: GrpcStatusCode): ErrorCode {
     case GRPC_STATUS.CANCELLED:
     case GRPC_STATUS.DEADLINE_EXCEEDED:
       return ERROR_CODE.TIMEOUT;
+
     case GRPC_STATUS.INVALID_ARGUMENT:
       return ERROR_CODE.BAD_REQUEST;
+
     case GRPC_STATUS.UNAUTHENTICATED:
       return ERROR_CODE.UNAUTHORIZED;
+
     case GRPC_STATUS.PERMISSION_DENIED:
       return ERROR_CODE.FORBIDDEN;
+
     case GRPC_STATUS.NOT_FOUND:
       return ERROR_CODE.NOT_FOUND;
+
     case GRPC_STATUS.ALREADY_EXISTS:
       return ERROR_CODE.CONFLICT;
+
     case GRPC_STATUS.UNAVAILABLE:
       return ERROR_CODE.SERVICE_UNAVAILABLE;
+
     default:
       return ERROR_CODE.INTERNAL_ERROR;
   }
