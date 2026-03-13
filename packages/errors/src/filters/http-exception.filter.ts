@@ -1,6 +1,10 @@
 import { ArgumentsHost, Catch, type ExceptionFilter, HttpStatus } from '@nestjs/common';
 
+import { getTraceId } from '@repo/logger';
+
 import { mapUnknownToHttpError, toErrorResponse } from '../mappers';
+
+// ----------------------------------------------------------------------------
 
 @Catch()
 export class GlobalHttpExceptionFilter implements ExceptionFilter {
@@ -21,10 +25,11 @@ export class GlobalHttpExceptionFilter implements ExceptionFilter {
 
 function extractTraceId(headers?: Record<string, unknown>): string | undefined {
   const traceHeader = headers?.['x-trace-id'];
+
   if (typeof traceHeader === 'string') return traceHeader;
   if (Array.isArray(traceHeader) && typeof traceHeader[0] === 'string') {
     return traceHeader[0];
   }
 
-  return undefined;
+  return getTraceId();
 }

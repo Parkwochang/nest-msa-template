@@ -1,9 +1,10 @@
-import { mapUnknownToGrpcError } from '@/mappers';
-import { extractStack } from '@/mappers/utils.mapper';
 import { Catch, type ExceptionFilter } from '@nestjs/common';
-import { RpcException } from '@nestjs/microservices';
 
 import { AppLogger } from '@repo/logger';
+
+import { AppRpcException } from '@/exceptions';
+import { mapUnknownToGrpcError } from '@/mappers';
+import { extractStack } from '@/mappers/utils.mapper';
 
 // ----------------------------------------------------------------------------
 
@@ -23,6 +24,6 @@ export class GlobalGrpcExceptionFilter implements ExceptionFilter<unknown> {
       stack: extractStack(exception),
     });
 
-    throw new RpcException(mapped);
+    throw new AppRpcException(mapped);
   }
 }

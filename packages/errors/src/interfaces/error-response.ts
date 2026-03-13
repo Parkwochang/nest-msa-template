@@ -1,3 +1,4 @@
+import type { HttpStatus } from '@nestjs/common';
 import type { ErrorCode } from '@repo/core';
 
 export interface ErrorEnvelope {
@@ -12,4 +13,16 @@ export interface ErrorResponse {
   path?: string;
   traceId?: string;
   error: ErrorEnvelope;
+}
+
+export interface HttpMapperOptions {
+  path?: string;
+  traceId?: string;
+}
+
+export interface HttpErrorResponse {
+  status: HttpStatus;
+  code: ErrorCode;
+  message: string;
+  details?: unknown;
 }
