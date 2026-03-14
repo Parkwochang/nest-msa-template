@@ -7,7 +7,7 @@ import {
   HealthCheckResult,
   HealthCheckService,
   HealthService,
-} from '@repo/config/health';
+} from '@repo/health';
 import { PROTO_PATHS } from '@repo/proto';
 
 // ----------------------------------------------------------------------------

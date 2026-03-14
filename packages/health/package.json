@@ -1,11 +1,9 @@
 {
-  "name": "@repo/redis",
+  "name": "@repo/health",
   "version": "0.0.0",
   "private": true,
-  "description": "redis module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "exports": "./dist/index.js",
   "scripts": {
     "build": "tsc --build",
     "dev": "tsc --build --watch",
@@ -13,16 +11,17 @@
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
-    "@repo/config": "workspace:*",
-    "ioredis": "catalog:redis"
+    "@repo/core": "workspace:*",
+    "@nestjs/terminus": "catalog:nestjs"
   },
   "devDependencies": {
-    "@repo/typescript-config": "workspace:*",
-    "@types/node": "^22.10.7",
     "@nestjs/common": "catalog:nestjs",
     "@nestjs/core": "catalog:nestjs",
-    "@nestjs/config": "catalog:nestjs",
-    "typescript": "catalog:"
+    "@nestjs/microservices": "catalog:nestjs",
+    "@repo/typescript-config": "workspace:*",
+    "@types/node": "^22.10.7",
+    "typescript": "catalog:",
+    "rxjs": "catalog:"
   },
   "peerDependencies": {
     "@nestjs/common": "catalog:nestjs",

@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 
-import { HealthModule } from '@repo/config/health';
+import { HealthModule } from '@repo/health';
 
 import { GatewayHealthController } from './health.controller';
 

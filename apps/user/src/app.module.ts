@@ -5,7 +5,7 @@ import { ZodValidationPipe } from 'nestjs-zod';
 import { LoggerModule, TraceInterceptor } from '@repo/logger';
 import { AppConfigModule } from '@repo/config/env';
 import { GRPC_SERVICE } from '@repo/config/grpc';
-import { GrpcHealthModule } from '@repo/config/health';
+import { GrpcHealthModule } from '@repo/health';
 import { GlobalGrpcExceptionFilter } from '@repo/errors';
 
 import { AppController } from './app.controller';
