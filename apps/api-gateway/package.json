@@ -28,6 +28,8 @@
     "@nestjs/microservices": "catalog:nestjs",
     "@nestjs/platform-express": "catalog:nestjs",
     "@repo/config": "workspace:*",
+    "@repo/security": "workspace:*",
+    "@repo/health": "workspace:*",
     "@repo/errors": "workspace:*",
     "@repo/logger": "workspace:*",
     "@repo/proto": "workspace:*",

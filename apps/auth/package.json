@@ -27,7 +27,7 @@
     "@repo/errors": "workspace:*",
     "@repo/logger": "workspace:*",
     "@repo/proto": "workspace:*",
-    "@repo/redis": "workspace:*",
+    "@repo/transport": "workspace:*",
     "@nestjs/common": "catalog:nestjs",
     "@nestjs/core": "catalog:nestjs",
     "@nestjs/config": "catalog:nestjs",

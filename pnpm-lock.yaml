@@ -152,12 +152,18 @@ importers:
       '@repo/errors':
         specifier: workspace:*
         version: link:../../packages/errors
+      '@repo/health':
+        specifier: workspace:*
+        version: link:../../packages/health
       '@repo/logger':
         specifier: workspace:*
         version: link:../../packages/logger
       '@repo/proto':
         specifier: workspace:*
         version: link:../../packages/proto
+      '@repo/security':
+        specifier: workspace:*
+        version: link:../../packages/security
       '@repo/transport':
         specifier: workspace:*
         version: link:../../packages/transport
@@ -291,9 +297,9 @@ importers:
       '@repo/proto':
         specifier: workspace:*
         version: link:../../packages/proto
-      '@repo/redis':
+      '@repo/transport':
         specifier: workspace:*
-        version: link:../../packages/redis
+        version: link:../../packages/transport
       dotenv:
         specifier: catalog:prisma
         version: 17.3.1
@@ -424,6 +430,9 @@ importers:
       '@repo/errors':
         specifier: workspace:*
         version: link:../../packages/errors
+      '@repo/health':
+        specifier: workspace:*
+        version: link:../../packages/health
       '@repo/logger':
         specifier: workspace:*
         version: link:../../packages/logger
@@ -551,9 +560,6 @@ importers:
 
   packages/config:
     dependencies:
-      '@nestjs/terminus':
-        specifier: catalog:nestjs
-        version: 11.1.1(@grpc/grpc-js@1.14.3)(@grpc/proto-loader@0.8.0)(@nestjs/common@11.1.10(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.10)(@nestjs/microservices@11.1.11)(@prisma/client@7.4.0(prisma@7.4.0(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2))(reflect-metadata@0.2.2)(rxjs@7.8.2)
       '@repo/core':
         specifier: workspace:*
         version: link:../core
@@ -570,9 +576,6 @@ importers:
       '@nestjs/core':
         specifier: catalog:nestjs
         version: 11.1.10(@nestjs/common@11.1.10(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/microservices@11.1.11)(@nestjs/platform-express@11.1.10)(reflect-metadata@0.2.2)(rxjs@7.8.2)
-      '@nestjs/jwt':
-        specifier: catalog:auth
-        version: 11.0.2(@nestjs/common@11.1.10(reflect-metadata@0.2.2)(rxjs@7.8.2))
       '@nestjs/microservices':
         specifier: catalog:nestjs
         version: 11.1.11(@grpc/grpc-js@1.14.3)(@nestjs/common@11.1.10(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.10)(ioredis@5.9.3)(reflect-metadata@0.2.2)(rxjs@7.8.2)
@@ -628,6 +631,37 @@ importers:
       '@types/node':
         specifier: ^22.10.7
         version: 22.19.3
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.2
+
+  packages/health:
+    dependencies:
+      '@nestjs/terminus':
+        specifier: catalog:nestjs
+        version: 11.1.1(@grpc/grpc-js@1.14.3)(@grpc/proto-loader@0.8.0)(@nestjs/common@11.1.10(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.10)(@nestjs/microservices@11.1.11)(@prisma/client@7.4.0(prisma@7.4.0(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2))(reflect-metadata@0.2.2)(rxjs@7.8.2)
+      '@repo/core':
+        specifier: workspace:*
+        version: link:../core
+    devDependencies:
+      '@nestjs/common':
+        specifier: catalog:nestjs
+        version: 11.1.10(reflect-metadata@0.2.2)(rxjs@7.8.2)
+      '@nestjs/core':
+        specifier: catalog:nestjs
+        version: 11.1.10(@nestjs/common@11.1.10(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/microservices@11.1.11)(@nestjs/platform-express@11.1.10)(reflect-metadata@0.2.2)(rxjs@7.8.2)
+      '@nestjs/microservices':
+        specifier: catalog:nestjs
+        version: 11.1.11(@grpc/grpc-js@1.14.3)(@nestjs/common@11.1.10(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.10)(ioredis@5.9.3)(reflect-metadata@0.2.2)(rxjs@7.8.2)
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../../tools/typescript-config
+      '@types/node':
+        specifier: ^22.10.7
+        version: 22.19.3
+      rxjs:
+        specifier: 'catalog:'
+        version: 7.8.2
       typescript:
         specifier: 'catalog:'
         version: 5.9.2
@@ -694,14 +728,14 @@ importers:
         specifier: 'catalog:'
         version: 5.9.2
 
-  packages/redis:
+  packages/security:
     dependencies:
-      '@repo/config':
+      '@nestjs/jwt':
+        specifier: catalog:auth
+        version: 11.0.2(@nestjs/common@11.1.10(reflect-metadata@0.2.2)(rxjs@7.8.2))
+      '@repo/core':
         specifier: workspace:*
-        version: link:../config
-      ioredis:
-        specifier: catalog:redis
-        version: 5.9.3
+        version: link:../core
     devDependencies:
       '@nestjs/common':
         specifier: catalog:nestjs
@@ -718,6 +752,9 @@ importers:
       '@types/node':
         specifier: ^22.10.7
         version: 22.19.3
+      rxjs:
+        specifier: 'catalog:'
+        version: 7.8.2
       typescript:
         specifier: 'catalog:'
         version: 5.9.2

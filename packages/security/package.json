@@ -1,0 +1,41 @@
+{
+  "name": "@repo/security",
+  "version": "0.0.0",
+  "private": true,
+  "exports": {
+    "./auth": {
+      "types": "./dist/auth/index.d.ts",
+      "default": "./dist/auth/index.js"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "auth": [
+        "./dist/auth/index.d.ts"
+      ]
+    }
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "dev": "tsc --build --watch",
+    "clean": "rm -rf dist",
+    "check-types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@repo/core": "workspace:*",
+    "@nestjs/jwt": "catalog:auth"
+  },
+  "devDependencies": {
+    "@nestjs/common": "catalog:nestjs",
+    "@nestjs/core": "catalog:nestjs",
+    "@nestjs/config": "catalog:nestjs",
+    "@repo/typescript-config": "workspace:*",
+    "@types/node": "^22.10.7",
+    "typescript": "catalog:",
+    "rxjs": "catalog:"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "catalog:nestjs",
+    "@nestjs/core": "catalog:nestjs"
+  }
+}

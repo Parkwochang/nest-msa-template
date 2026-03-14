@@ -11,7 +11,7 @@ import {
   COMMON_CONFIG,
   type CommonConfigType,
 } from '@repo/config/env';
-import { AuthModule } from '@repo/config/auth';
+import { AuthModule } from '@repo/security/auth';
 
 import { AppController } from '@/app.controller';
 import { AppService } from '@/app.service';
