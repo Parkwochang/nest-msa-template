@@ -13,6 +13,7 @@
     "check-types": "turbo run check-types",
     "create-service": "node scripts/create-service.js",
     "create-package": "node scripts/create-package.js",
+    "package": "pnpm -F @repo/$REPO",
     "gw": "pnpm -F api-gateway",
     "user": "pnpm -F user-service",
     "auth": "pnpm -F auth-service",

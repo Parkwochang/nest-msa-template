@@ -9,8 +9,9 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 
-import { isGrpcLikeError, isRxTimeoutError } from './grpc-error.guard';
 import { GRPC_STATUS } from '@repo/core';
+
+import { isGrpcLikeError, isRxTimeoutError } from './grpc-error.guard';
 
 // ----------------------------------------------------------------------------
 
