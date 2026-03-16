@@ -10,7 +10,7 @@ import {
   AppConfigModule,
   COMMON_CONFIG,
   type CommonConfigType,
-} from '@repo/config/env';
+} from '@repo/config';
 import { AuthModule } from '@repo/security/auth';
 
 import { AppController } from '@/app.controller';

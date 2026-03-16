@@ -2,24 +2,13 @@
   "name": "@repo/config",
   "version": "0.0.0",
   "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
-    "./grpc": {
-      "types": "./dist/grpc/index.d.ts",
-      "default": "./dist/grpc/index.js"
-    },
-    "./env": {
-      "types": "./dist/env/index.d.ts",
-      "default": "./dist/env/index.js"
-    }
-  },
-  "typesVersions": {
-    "*": {
-      "grpc": [
-        "./dist/grpc/index.d.ts"
-      ],
-      "env": [
-        "./dist/env/index.d.ts"
-      ]
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js",
+      "require": "./dist/index.js"
     }
   },
   "scripts": {

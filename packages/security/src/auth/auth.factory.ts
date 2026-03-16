@@ -2,12 +2,12 @@ import type { JwtModuleOptions, JwtSignOptions } from '@nestjs/jwt';
 
 export interface AuthConfigOptions {
   secret: string;
-  expiresIn: JwtSignOptions['expiresIn'];
+  options: JwtSignOptions;
 }
 
 export function createAuthConfig(options: AuthConfigOptions): JwtModuleOptions {
   return {
     secret: options.secret,
-    signOptions: { expiresIn: options.expiresIn },
+    signOptions: { ...options.options },
   };
 }

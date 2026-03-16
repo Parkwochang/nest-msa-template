@@ -1,7 +1,11 @@
 import { type DynamicModule, Global, Module } from '@nestjs/common';
 import { type ConfigFactory, ConfigModule as NestConfigModule } from '@nestjs/config';
 
-import { COMMON_CONFIG, APP_CONFIG, GATEWAY_CONFIG, AppConfigSchema, GatewayConfigSchema } from './index';
+import { DATABASE_CONFIG } from './database.config';
+import { APP_CONFIG } from './app.config';
+import { REDIS_CONFIG } from './redis.config';
+import { GATEWAY_CONFIG } from './gateway.config';
+import { JWT_CONFIG } from './jwt.config';
 
 // ----------------------------------------------------------------------------
 
@@ -74,11 +78,9 @@ export class AppConfigModule {
 }
 
 function getDefaultLoad(appType: ConfigModuleOptions['appType']): Array<ConfigFactory> {
-  const defaultLoad: Array<ConfigFactory> = [COMMON_CONFIG];
   if (appType === 'api') {
-    defaultLoad.push(GATEWAY_CONFIG);
-  } else {
-    defaultLoad.push(APP_CONFIG);
+    return [GATEWAY_CONFIG, REDIS_CONFIG, JWT_CONFIG];
   }
-  return defaultLoad;
+
+  return [APP_CONFIG, DATABASE_CONFIG, REDIS_CONFIG];
 }

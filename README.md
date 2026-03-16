@@ -53,6 +53,7 @@ pnpm build
 ```bash
 pnpm --filter @repo/proto-types generate
 pnpm --filter @repo/proto-types build
+REPO=proto pnpm package build
 ```
 
 > 📚 자세한 내용은 [PROTO_SETUP.md](./PROTO_SETUP.md)를 참고하세요.

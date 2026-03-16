@@ -13,17 +13,7 @@
     "check-types": "turbo run check-types",
     "create-service": "node scripts/create-service.js",
     "create-package": "node scripts/create-package.js",
-    "package": "pnpm -F @repo/$REPO",
-    "gw": "pnpm -F api-gateway",
-    "user": "pnpm -F user-service",
-    "auth": "pnpm -F auth-service",
-    "common": "pnpm -F @repo/common",
-    "core": "pnpm -F @repo/core",
-    "config": "pnpm -F @repo/config",
-    "logger": "pnpm -F @repo/logger",
-    "proto": "pnpm -F @repo/proto",
-    "errors": "pnpm -F @repo/errors",
-    "transport": "pnpm -F @repo/transport"
+    "package": "pnpm -F @repo/$REPO"
   },
   "devDependencies": {
     "prettier": "catalog:",
