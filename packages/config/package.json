@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@repo/core": "workspace:*",
+    "@repo/common": "workspace:*",
     "opossum": "catalog:circuit-breaker"
   },
   "devDependencies": {

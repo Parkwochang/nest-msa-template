@@ -1,18 +1,12 @@
 import z from 'zod';
 import { createZodDto } from 'nestjs-zod/dto';
 
-const emptyToUndefined = (v: unknown) => (v ? undefined : v);
+import { emptyToUndefined, CommonSchema } from '@repo/common';
 
 const FindOneSchema = z
   .object({
-    id: z.preprocess(
-      emptyToUndefined,
-      z.string().uuid('ID 형식이 올바르지 않습니다.').optional(),
-    ),
-    email: z.preprocess(
-      emptyToUndefined,
-      z.string().email('이메일 형식이 올바르지 않습니다.').optional(),
-    ),
+    id: z.preprocess(emptyToUndefined, CommonSchema.uuid.optional()),
+    email: z.preprocess(emptyToUndefined, CommonSchema.email.optional()),
   })
   .refine((v) => Number(Boolean(v.id)) + Number(Boolean(v.email)) === 1, {
     message: 'id or email 중 정확히 하나만 보내야 합니다.',
@@ -37,7 +31,7 @@ const SortOrderSchema = z.enum(['asc', 'desc']);
 
 // query string 입력을 고려해 coerce 사용
 const FindManySchema = z.object({
-  page: z.coerce.number().int().min(1).default(1),
+  page: CommonSchema.page,
   limit: z.coerce.number().int().min(1).max(100).default(10),
   q: z.string().trim().min(1).max(100).optional(),
   status: UserStatusSchema.optional(),

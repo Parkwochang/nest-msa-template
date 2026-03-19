@@ -25,6 +25,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@repo/common": "workspace:*",
     "@repo/config": "workspace:*",
     "@repo/health": "workspace:*",
     "@repo/errors": "workspace:*",
