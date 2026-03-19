@@ -421,6 +421,9 @@ importers:
       '@prisma/client':
         specifier: catalog:prisma
         version: 7.4.0(prisma@7.4.0(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2)
+      '@repo/common':
+        specifier: workspace:*
+        version: link:../../packages/common
       '@repo/config':
         specifier: workspace:*
         version: link:../../packages/config
@@ -561,6 +564,9 @@ importers:
 
   packages/config:
     dependencies:
+      '@repo/common':
+        specifier: workspace:*
+        version: link:../common
       '@repo/core':
         specifier: workspace:*
         version: link:../core

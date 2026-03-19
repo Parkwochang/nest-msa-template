@@ -1,12 +1,14 @@
 import z from 'zod';
 import { registerAs } from '@nestjs/config';
 
+import { CommonSchema } from '@repo/common';
+
 // ----------------------------------------------------------------------------
 // prettier-ignore
 const GatewayConfigSchema = z.object({
-  HTTP_PORT    : z.number(),
-  AUTH_GRPC_URL: z.string(),
-  USER_GRPC_URL: z.string(),
+  HTTP_PORT    : CommonSchema.port,
+  AUTH_GRPC_URL: CommonSchema.string,
+  USER_GRPC_URL: CommonSchema.string,
 });
 
 export const GATEWAY_CONFIG = registerAs('gateway', () => {

@@ -6,11 +6,7 @@ import { ZodValidationPipe } from 'nestjs-zod';
 import { LoggerModule, TraceInterceptor } from '@repo/logger';
 import { GrpcModule } from '@repo/transport/grpc';
 import { GlobalHttpExceptionFilter } from '@repo/errors';
-import {
-  AppConfigModule,
-  COMMON_CONFIG,
-  type CommonConfigType,
-} from '@repo/config';
+import { AppConfigModule, JWT_CONFIG, JwtConfigType } from '@repo/config';
 import { AuthModule } from '@repo/security/auth';
 
 import { AppController } from '@/app.controller';
@@ -40,10 +36,10 @@ import { GatewayHealthModule } from './common/health/health.module';
     }),
 
     AuthModule.forRootAsync({
-      inject: [COMMON_CONFIG.KEY],
-      useFactory: (commonConfig: CommonConfigType) => ({
-        secret: commonConfig.JWT_SECRET,
-        expiresIn: commonConfig.JWT_EXPIRES_IN,
+      inject: [JWT_CONFIG.KEY],
+      useFactory: (jwtConfig: JwtConfigType) => ({
+        secret: jwtConfig.JWT_SECRET,
+        expiresIn: jwtConfig.JWT_EXPIRES_IN,
       }),
     }),
 

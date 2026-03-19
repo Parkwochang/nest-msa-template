@@ -1,16 +1,17 @@
 import z from 'zod';
 import { registerAs } from '@nestjs/config';
+import { CommonSchema } from '@repo/common';
 
 // ----------------------------------------------------------------------------
 // prettier-ignore
 export const RedisConfigSchema = z.object({
-  REDIS_HOST           : z.string(),
-  REDIS_PORT           : z.string().or(z.number()).transform(Number),
-  REDIS_PASSWORD       : z.string().optional(),
-  REDIS_DB             : z.string().or(z.number()).transform(Number).optional(), // 파티셔닝 필요할 때
-  REDIS_CONNECT_TIMEOUT: z.string().or(z.number()).transform(Number).default(3000),
-  REDIS_TTL            : z.string().or(z.number()).transform(Number).default(60),
-  REDIS_KEY_PREFIX     : z.string().default(''),
+  REDIS_HOST           : CommonSchema.string,
+  REDIS_PORT           : CommonSchema.port,
+  REDIS_PASSWORD       : CommonSchema.string.optional(),
+  REDIS_DB             : CommonSchema.port.optional(), // 파티셔닝 필요할 때
+  REDIS_CONNECT_TIMEOUT: CommonSchema.timeout,
+  REDIS_TTL            : CommonSchema.timeout,
+  REDIS_KEY_PREFIX     : CommonSchema.string.default(''),
 });
 
 // prettier-ignore

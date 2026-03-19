@@ -1,14 +1,16 @@
 import z from 'zod';
 import { registerAs } from '@nestjs/config';
 
+import { CommonSchema } from '@repo/common';
+
 // ----------------------------------------------------------------------------
 // prettier-ignore
 
 export const AppConfigSchema = z.object({
-  NODE_ENV    : z.enum(['development', 'production', 'test']).default('development'),
-  HTTP_PORT   : z.string().transform(Number),
-  GRPC_URL    : z.string(),
-  PACKAGE_NAME: z.string(),
+  NODE_ENV    : CommonSchema.env,
+  HTTP_PORT   : CommonSchema.port,
+  GRPC_URL    : CommonSchema.string,
+  PACKAGE_NAME: CommonSchema.string,
 });
 
 // ----------------------------------------------------------------------------

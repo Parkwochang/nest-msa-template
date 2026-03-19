@@ -25,7 +25,7 @@ export const CommonSchema = {
     .string()
     .url({ message: 'DB URL이 아닙니다.' })
     .startsWith('postgresql://', { message: 'PostgreSQL DB URL이 아닙니다.' }),
-  timeout  : z.coerce.number().int().positive().default(5000),
+  timeout  : z.coerce.number().int().positive().default(3000),
   expiresIn: z.string().regex(/^[0-9]+[smhd]$/, { message: '올바른 만료 시간 형식이 아닙니다.' }),
   secret   : z.string().min(32, { message: '시크릿 키는 최소 32자 이상이어야 합니다.' }),
   
@@ -46,6 +46,8 @@ export const CommonSchema = {
 
 export const calculateSkip = (page: number, take: number) => (page - 1) * take;
 
+export const emptyToUndefined = (v: unknown) => (v ? v : undefined);
+
 // ----------------------------------------------------------------------------
 
 export function createStringIntSchema(min = 0, max = 100) {
@@ -57,3 +59,6 @@ export function createStringIntSchema(min = 0, max = 100) {
 export function validate<T>(schema: z.ZodSchema<T>, data: unknown) {
   return schema.parse(data);
 }
+
+// ! grpc용 0 과 빈 문자열에 대해 undefined로 변환
+// ! 없는 값에 대해 formating 필요
