@@ -39,7 +39,7 @@ import { GatewayHealthModule } from './common/health/health.module';
       inject: [JWT_CONFIG.KEY],
       useFactory: (jwtConfig: JwtConfigType) => ({
         secret: jwtConfig.JWT_SECRET,
-        expiresIn: jwtConfig.JWT_EXPIRES_IN,
+        expiresIn: jwtConfig.JWT_EXPIRES_IN as number,
       }),
     }),
 
