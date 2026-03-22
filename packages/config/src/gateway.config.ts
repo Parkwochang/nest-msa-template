@@ -11,9 +11,10 @@ const GatewayConfigSchema = z.object({
   USER_GRPC_URL: CommonSchema.string,
 });
 
+// prettier-ignore
 export const GATEWAY_CONFIG = registerAs('gateway', () => {
   return GatewayConfigSchema.parse({
-    HTTP_PORT: process.env.HTTP_PORT,
+    HTTP_PORT    : process.env.HTTP_PORT,
     AUTH_GRPC_URL: process.env.AUTH_GRPC_URL,
     USER_GRPC_URL: process.env.USER_GRPC_URL,
   });

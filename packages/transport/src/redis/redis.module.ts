@@ -1,6 +1,5 @@
 import Redis from 'ioredis';
 import { Module, DynamicModule } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { REDIS_CONFIG, RedisConfigType } from '@repo/config';
 
