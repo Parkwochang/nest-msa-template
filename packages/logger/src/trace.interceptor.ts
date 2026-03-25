@@ -1,8 +1,10 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
 import { finalize, Observable, tap } from 'rxjs';
 
-import { requestContext, generateTraceId } from './trace.context';
+import { type AuthUser, requestContext, generateTraceId } from './trace.context';
 import { AppLogger } from './app-logger.service';
+
+// ----------------------------------------------------------------------------
 
 /**
  * 모든 요청에 고유한 traceId를 할당하는 Interceptor
@@ -30,28 +32,31 @@ export class TraceInterceptor implements NestInterceptor {
     const start = Date.now();
 
     let traceId: string;
+    let user: AuthUser | undefined;
 
-    // HTTP 요청 (API Gateway 등)
     if (contextType === 'http') {
       const request = context.switchToHttp().getRequest();
 
       traceId = request.headers['x-trace-id'] || generateTraceId();
-    }
-    // gRPC 요청 (마이크로서비스)
-    else if (contextType === 'rpc') {
+      user = request.user as AuthUser | undefined;
+    } else if (contextType === 'rpc') {
       const rpcContext = context.switchToRpc().getContext();
       const traceIdArray = rpcContext?.get?.('x-trace-id');
+      const userIdArray = rpcContext?.get?.('x-user-id');
 
       traceId = (traceIdArray?.[0] as string) || generateTraceId();
-    }
-    // 기타 (WebSocket 등)
-    else {
+
+      const userId = userIdArray?.[0] as string | undefined;
+      if (userId) {
+        user = { sub: userId };
+      }
+    } else {
       traceId = generateTraceId();
     }
 
+    // 동기 실행 컨텍스트에 traceId를 설정하여 전체 요청 생명주기 동안 사용
     return new Observable((subscriber) => {
-      // 동기 실행 컨텍스트에 traceId를 설정하여 전체 요청 생명주기 동안 사용
-      requestContext.run({ traceId }, () => {
+      requestContext.run({ traceId, user }, () => {
         next
           .handle()
           .pipe(

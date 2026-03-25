@@ -1,10 +1,13 @@
 import { Metadata } from '@grpc/grpc-js';
 
-import { getTraceId } from '@repo/logger';
+import { getTraceId, getCurrentUser } from '@repo/logger';
 
 // ----------------------------------------------------------------------------
 
 export const TRACE_ID_HEADER = 'x-trace-id';
+export const USER_ID_HEADER = 'x-user-id';
+
+// ----------------------------------------------------------------------------
 
 export function createMetadata(init?: Record<string, string>): Metadata {
   const metadata = new Metadata();
@@ -21,9 +24,14 @@ export function createMetadata(init?: Record<string, string>): Metadata {
 export function createTraceMetadata(traceId?: string, metadata?: Metadata): Metadata {
   const next = metadata ?? new Metadata();
   const traceIdValue = traceId ?? getTraceId();
+  const user = getCurrentUser();
 
   if (traceIdValue) {
     next.set(TRACE_ID_HEADER, traceIdValue);
+  }
+
+  if (user?.sub) {
+    next.set(USER_ID_HEADER, user.sub);
   }
 
   return next;

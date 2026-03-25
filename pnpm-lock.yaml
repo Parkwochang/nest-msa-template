@@ -743,6 +743,12 @@ importers:
       '@repo/core':
         specifier: workspace:*
         version: link:../core
+      '@repo/errors':
+        specifier: workspace:*
+        version: link:../errors
+      '@repo/logger':
+        specifier: workspace:*
+        version: link:../logger
     devDependencies:
       '@nestjs/common':
         specifier: catalog:nestjs
@@ -786,6 +792,9 @@ importers:
       '@repo/core':
         specifier: workspace:*
         version: link:../core
+      '@repo/errors':
+        specifier: workspace:*
+        version: link:../errors
       '@repo/logger':
         specifier: workspace:*
         version: link:../logger

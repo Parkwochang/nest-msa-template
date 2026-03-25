@@ -5,4 +5,6 @@ export class UserEntity {
     public readonly name: string,
     public readonly createdAt: Date,
   ) {}
+
+  static create() {}
 }

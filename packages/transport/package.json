@@ -40,6 +40,7 @@
     "@repo/core": "workspace:*",
     "@repo/logger": "workspace:*",
     "@repo/config": "workspace:*",
+    "@repo/errors": "workspace:*",
     "@grpc/grpc-js": "catalog:grpc",
     "@nestjs/common": "catalog:nestjs",
     "@nestjs/core": "catalog:nestjs",
