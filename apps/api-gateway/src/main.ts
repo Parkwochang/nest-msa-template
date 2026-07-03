@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { VersioningType } from '@nestjs/common';
 
 import { WINSTON_MODULE_NEST_PROVIDER } from '@repo/logger';
-import { GATEWAY_CONFIG, type GatewayConfigType } from '@repo/config/env';
+import { GATEWAY_CONFIG, type GatewayConfigType } from '@repo/config';
 import { GlobalHttpExceptionFilter } from '@repo/errors';
 
 import { AppModule } from './app.module';

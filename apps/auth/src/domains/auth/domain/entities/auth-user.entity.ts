@@ -2,14 +2,14 @@ import {
   InactiveAuthUserError,
   InvalidCredentialsError,
   PasswordLoginNotAvailableError,
-} from '@/domains/auth/domain/errors/auth.error';
+} from '@/domains/auth/domain/errors';
 
 export class AuthUserEntity {
   constructor(
     public readonly id: string,
     public readonly email: string,
     public readonly name: string,
-    public readonly password: string | null,
+    public readonly passwordHash: string | null,
     public readonly provider:
       | 'LOCAL'
       | 'GOOGLE'
@@ -32,37 +32,55 @@ export class AuthUserEntity {
   }
 
   hasPassword(): boolean {
-    return typeof this.password === 'string' && this.password.length > 0;
+    return (
+      typeof this.passwordHash === 'string' && this.passwordHash.length > 0
+    );
   }
 
   isPasswordMatched(password: string): boolean {
-    return this.password === password;
+    return this.passwordHash === password;
+  }
+
+  isEmailMatched(email: string): boolean {
+    return this.email === email;
   }
 
   isActive(): boolean {
     return this.status === 'ACTIVE';
   }
 
-  canLoginWithPassword(input: { password: string }): boolean {
+  verifyIdentity(input: { email: string; password: string }) {
     return (
-      !this.isOauthAccount() &&
-      this.hasPassword() &&
-      this.isPasswordMatched(input.password) &&
-      this.isActive()
+      this.isEmailMatched(input.email) && this.isPasswordMatched(input.password)
     );
   }
 
-  assertCanLoginWithPassword(input: { password: string }): void {
-    if (this.isOauthAccount() || !this.hasPassword()) {
-      throw new PasswordLoginNotAvailableError();
+  canLogin(input: { email: string; password?: string }): boolean {
+    if (this.isOauthAccount()) return this.isEmailMatched(input.email);
+
+    if (!input.password) return false;
+
+    return this.verifyIdentity({
+      email: input.email,
+      password: input.password,
+    });
+  }
+
+  assertCanLogin(input: { email: string; password?: string }): void {
+    if (this.isOauthAccount() && !this.isEmailMatched(input.email)) {
+      throw new InvalidCredentialsError('이메일이 일치하지 않습니다.');
+    }
+
+    if (!this.isEmailMatched(input.email)) {
+      throw new InvalidCredentialsError('이메일이 일치하지 않습니다.');
+    }
+
+    if (!this.isPasswordMatched(input.password ?? '')) {
+      throw new InvalidCredentialsError('비밀번호가 일치하지 않습니다.');
     }
 
     if (!this.isActive()) {
       throw new InactiveAuthUserError();
-    }
-
-    if (!this.isPasswordMatched(input.password)) {
-      throw new InvalidCredentialsError();
     }
   }
 }

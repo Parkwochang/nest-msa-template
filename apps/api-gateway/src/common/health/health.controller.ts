@@ -1,7 +1,7 @@
 import { Controller, Get, Inject } from '@nestjs/common';
 
-import { GATEWAY_CONFIG, GatewayConfigType } from '@repo/config/env';
-import { GRPC_PACKAGE, GRPC_SERVICE } from '@repo/config/grpc';
+import { GATEWAY_CONFIG, GatewayConfigType } from '@repo/config';
+import { GRPC_PACKAGE, GRPC_SERVICE } from '@repo/transport/grpc';
 import {
   HealthCheck,
   HealthCheckResult,
